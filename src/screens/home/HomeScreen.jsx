@@ -1,11 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import LoginScreen from './src/screens/auth/LoginScreen';
 
-export default function App() {
+export default function HomeScreen() {
   return (
     <View>
-      <LoginScreen />
+      <Text>HomeScreen</Text>
     </View>
   );
 }
