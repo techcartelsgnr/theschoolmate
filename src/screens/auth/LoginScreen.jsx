@@ -29,6 +29,7 @@ export default function LoginScreen() {
       /> */}
 
       {/* School ID */}
+      {/* School ID */}
       <Text style={styles.label}>School ID</Text>
       <InputField
         label="Enter School ID"
