@@ -28,17 +28,19 @@ const ButtonWithLoader = ({
 
 const styles = StyleSheet.create({
   btn: {
-    paddingVertical: 14,
+    paddingVertical: 12,
     borderRadius: 8,
     marginTop: 15,
     alignItems: 'center',
     justifyContent: 'center',
+    width: '100%',
   },
   text: {
     color: '#fff',
-    fontFamily: 'Mulish-Bold',
-    fontSize: 14,
-    textTransform: 'capitalize',
+    fontFamily: 'Quicksand-Bold',
+    fontSize: 16,
+    textTransform: 'uppercase',
+    textAlign: 'center',
   },
 });
 

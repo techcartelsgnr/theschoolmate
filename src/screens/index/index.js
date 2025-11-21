@@ -1,0 +1,10 @@
+export { default as HomeScreen } from '../home/HomeScreen';
+export { default as LoginScreen } from '../auth/LoginScreen';
+export { default as ForgotPinScreen } from '../auth/ForgotPinScreen';
+export { default as OtpScreen } from '../auth/OtpScreen';
+export { default as FeesScreen } from '../Fees/FeesScreen';
+export { default as MarksScreen } from '../Marks/MarksScreen';
+export { default as ProfileScreen } from '../Profile/ProfileScreen';
+export { default as EditProfileScreen } from '../Profile/EditProfileScreen';
+export { default as AttendanceScreen } from '../attendance/AttendanceScreen';
+export { default as GalleryScreen } from '../gallery/GalleryScreen';
