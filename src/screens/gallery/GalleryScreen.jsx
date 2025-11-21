@@ -15,10 +15,12 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, Spacing } from '../../theme/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useNavigation } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('window');
 
 const GalleryScreen = () => {
+  const navigation = useNavigation();
   // ----------------------------
   // Replace API with LOCAL IMAGES
   // ----------------------------

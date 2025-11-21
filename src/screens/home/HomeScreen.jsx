@@ -155,25 +155,51 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   schoolHome: {
+    backgroundColor: COLORS.cardBackground,
+    paddingVertical: 20,
+    paddingHorizontal: 16,
+    borderRadius: 14,
+    marginHorizontal: 0,
+    marginBottom: 10,
+    alignItems: 'center',
+  },
+
+  logoContainer: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    backgroundColor: COLORS.white,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 12,
+
+    // Border ring around logo
+    borderWidth: 2,
+    borderColor: COLORS.primary,
   },
+
   schoollogo: {
-    width: 55,
-    height: 55,
+    width: 45,
+    height: 45,
   },
+
   schoolTitle: {
-    fontSize: Spacing.forteen,
-    color: COLORS.textDark,
+    fontSize: 18,
+    color: COLORS.whiteBackground,
     fontFamily: 'Quicksand-Bold',
-  },
-  schoolAddress: {
-    fontSize: Spacing.barah,
-    color: COLORS.textDark,
-    fontFamily: 'Quicksand-Bold',
+    marginBottom: 6,
     textAlign: 'center',
   },
+
+  schoolAddress: {
+    fontSize: 13,
+    color: COLORS.textSecondary,
+    fontFamily: 'Quicksand-Medium',
+    textAlign: 'center',
+    lineHeight: 18,
+    width: '90%',
+  },
+
   fullView: {
     flexDirection: 'row',
     flexWrap: 'wrap',
