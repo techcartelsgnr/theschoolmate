@@ -61,6 +61,7 @@ const InputAuthField = ({
         fontFamily: 'InterTight-Bold',
         paddingVertical: 0,
         opacity: 0.5,
+      
       }}
     />
     {fieldButtonFunction && (

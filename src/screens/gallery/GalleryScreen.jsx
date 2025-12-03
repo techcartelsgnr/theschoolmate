@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -6,305 +6,264 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
-  Modal,
-  Dimensions,
-  StatusBar,
-  Alert,
   ActivityIndicator,
+  StatusBar,
+  Dimensions,
+  PanResponder,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { COLORS, Spacing } from '../../theme/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { COLORS } from '../../theme/theme';
+import { useSelector } from 'react-redux';
+import commanServices from '../../redux/services/commanServices';
 import { useNavigation } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('window');
 
 const GalleryScreen = () => {
   const navigation = useNavigation();
-  // ----------------------------
-  // Replace API with LOCAL IMAGES
-  // ----------------------------
-  const localGallery = [
-    {
-      id: 1,
-      title: 'Image 1',
-      file_path: require('../../../assets/homeicon/dashboard.png'),
-    },
-    {
-      id: 2,
-      title: 'Image 2',
-      file_path: require('../../../assets/homeicon/gallery.png'),
-    },
-    {
-      id: 3,
-      title: 'Image 3',
-      file_path: require('../../../assets/homeicon/gallery.png'),
-    },
-    {
-      id: 4,
-      title: 'Image 4',
-      file_path: require('../../../assets/homeicon/gallery.png'),
-    },
-    {
-      id: 5,
-      title: 'Image 5',
-      file_path: require('../../../assets/homeicon/dashboard.png'),
-    },
-    {
-      id: 6,
-      title: 'Image 1',
-      file_path: require('../../../assets/homeicon/dashboard.png'),
-    },
-    {
-      id: 7,
-      title: 'Image 2',
-      file_path: require('../../../assets/homeicon/gallery.png'),
-    },
-    {
-      id: 8,
-      title: 'Image 3',
-      file_path: require('../../../assets/homeicon/gallery.png'),
-    },
-    {
-      id: 9,
-      title: 'Image 4',
-      file_path: require('../../../assets/homeicon/gallery.png'),
-    },
-    {
-      id: 10,
-      title: 'Image 5',
-      file_path: require('../../../assets/homeicon/dashboard.png'),
-    },
-  ];
+  const { token } = useSelector(state => state.auth);
 
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [gallery, setGallery] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const openImage = item => {
-    setSelectedImage(item);
-    setModalVisible(true);
+  // FULL SCREEN VIEW STATES
+  const [isFullScreen, setIsFullScreen] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // ----------------------------
+  // Fetch Gallery API
+  // ----------------------------
+  useEffect(() => {
+    if (!token) return;
+    loadGallery();
+  }, [token]);
+
+  const loadGallery = () => {
+    commanServices
+      .getSchoolGallery(token)
+      .then(res => setGallery(res.images))
+      .catch(err => console.log(err))
+      .finally(() => setLoading(false));
   };
 
-  const closeImage = () => {
-    setSelectedImage(null);
-    setModalVisible(false);
+  const onRefresh = () => {
+    setRefreshing(true);
+    commanServices
+      .getSchoolGallery(token)
+      .then(res => setGallery(res.images))
+      .catch(err => console.log(err))
+      .finally(() => setRefreshing(false));
   };
 
-  const handleDownload = () => {
-    if (!selectedImage) return;
+  // ----------------------------
+  // Full Screen Swipe Handling
+  // ----------------------------
+  const panResponder = PanResponder.create({
+    onMoveShouldSetPanResponder: () => true,
 
-    Alert.alert(
-      'Download Image',
-      `Do you want to download "${selectedImage.title}"?`,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Download',
-          onPress: () =>
-            Alert.alert('Success', 'Image downloaded successfully!'),
-        },
-      ],
-    );
+    onPanResponderRelease: (evt, gestureState) => {
+      if (gestureState.dx > 70) {
+        // Swipe Right
+        if (currentIndex > 0) setCurrentIndex(currentIndex - 1);
+      } else if (gestureState.dx < -70) {
+        // Swipe Left
+        if (currentIndex < gallery.length - 1)
+          setCurrentIndex(currentIndex + 1);
+      }
+    },
+  });
+
+  const openFullScreen = index => {
+    setCurrentIndex(index);
+    setIsFullScreen(true);
+  };
+
+  const closeFullScreen = () => {
+    setIsFullScreen(false);
   };
 
   const renderGalleryItem = ({ item, index }) => (
     <TouchableOpacity
       style={[styles.galleryItem, index % 3 !== 2 && styles.itemSpacing]}
-      onPress={() => openImage(item)}
+      onPress={() => openFullScreen(index)}
     >
-      <Image source={item.file_path} style={styles.galleryImage} />
+      <Image source={{ uri: item.img }} style={styles.galleryImage} />
     </TouchableOpacity>
   );
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor={COLORS.blue} barStyle="light-content" />
+      <StatusBar backgroundColor={COLORS.blue} barStyle="dark-content" />
 
-      <View style={{ flex: 1, backgroundColor: COLORS.whiteBackground }}>
-        <View style={styles.headerAtten}>
-          <TouchableOpacity
-            style={styles.backButtonAtten}
-            onPress={() => navigation.goBack()}
-          >
-            <Ionicons name="arrow-back" size={24} color={COLORS.textDark} />
-          </TouchableOpacity>
-          <Text style={styles.headerTitleAtten}>Gallery</Text>
-          <View style={{ width: '15%' }} />
-        </View>
-
-        <FlatList
-          data={localGallery}
-          renderItem={renderGalleryItem}
-          keyExtractor={item => item.id.toString()}
-          numColumns={3}
-          contentContainerStyle={styles.galleryContainer}
-          showsVerticalScrollIndicator={false}
-        />
-
-        {/* Image Modal */}
-        <Modal
-          visible={modalVisible}
-          transparent={true}
-          animationType="fade"
-          onRequestClose={closeImage}
-        >
-          <View style={styles.modalContainer}>
-            <TouchableOpacity
-              style={styles.modalBackground}
-              onPress={closeImage}
-            />
-
-            <View style={styles.modalContent}>
-              {selectedImage && (
-                <>
-                  <View style={styles.modalImageContainer}>
-                    <Image
-                      source={selectedImage.file_path}
-                      style={styles.modalImage}
-                    />
-                  </View>
-
-                  <View style={styles.imageInfo}>
-                    <View style={styles.textContainer}>
-                      <Text style={styles.modalTitle}>
-                        {selectedImage.title}
-                      </Text>
-                    </View>
-
-                    <TouchableOpacity
-                      style={styles.downloadButton}
-                      onPress={handleDownload}
-                    >
-                      <Text style={styles.downloadButtonText}>⬇️ Download</Text>
-                    </TouchableOpacity>
-                  </View>
-                </>
-              )}
-
-              <TouchableOpacity style={styles.closeButton} onPress={closeImage}>
-                <Text style={styles.closeButtonText}>✕</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
+      {/* HEADER */}
+      <View style={styles.headerAtten}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons name="arrow-back" size={24} color={COLORS.textDark} />
+        </TouchableOpacity>
+        <Text style={styles.headerTitleAtten}>Gallery</Text>
+        <View style={{ width: 24 }} />
       </View>
+
+      {/* GALLERY GRID */}
+      {!isFullScreen && (
+        <>
+          {loading ? (
+            <ActivityIndicator
+              size="large"
+              color={COLORS.primary}
+              style={{ marginTop: 40 }}
+            />
+          ) : (
+            <FlatList
+              data={gallery}
+              renderItem={renderGalleryItem}
+              keyExtractor={item => item.id.toString()}
+              numColumns={3}
+              contentContainerStyle={styles.galleryContainer}
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              showsVerticalScrollIndicator={false}
+            />
+          )}
+        </>
+      )}
+
+      {/* -----------------------------
+         FULL SCREEN IMAGE VIEWER 
+         ----------------------------- */}
+      {isFullScreen && (
+        <View style={styles.fullScreenContainer} {...panResponder.panHandlers}>
+
+          {/* Close Button */}
+          <TouchableOpacity style={styles.closeButton} onPress={closeFullScreen}>
+            <Ionicons name="close" size={30} color="#fff" />
+          </TouchableOpacity>
+
+          {/* Image */}
+          <Image
+            source={{ uri: gallery[currentIndex].img }}
+            style={styles.fullScreenImage}
+          />
+
+          {/* Left Navigation */}
+          {currentIndex > 0 && (
+            <TouchableOpacity
+              style={styles.leftNav}
+              onPress={() => setCurrentIndex(currentIndex - 1)}
+            >
+              <Ionicons name="chevron-back" size={40} color="#fff" />
+            </TouchableOpacity>
+          )}
+
+          {/* Right Navigation */}
+          {currentIndex < gallery.length - 1 && (
+            <TouchableOpacity
+              style={styles.rightNav}
+              onPress={() => setCurrentIndex(currentIndex + 1)}
+            >
+              <Ionicons name="chevron-forward" size={40} color="#fff" />
+            </TouchableOpacity>
+          )}
+
+          {/* Counter */}
+          <Text style={styles.counter}>
+            {currentIndex + 1} / {gallery.length}
+          </Text>
+        </View>
+      )}
     </SafeAreaView>
   );
 };
 
-// -----------------------------------------------------
-// Styles
-// -----------------------------------------------------
+// -------------------------------------------------
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+
   headerAtten: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 12,
-    backgroundColor: COLORS.whiteBackgroundBackground,
+    backgroundColor: COLORS.whiteBackground,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: '#ddd',
   },
-
-  backButtonAtten: { padding: 4 },
 
   headerTitleAtten: {
     fontSize: 18,
     fontFamily: 'Quicksand-Bold',
     color: COLORS.textDark,
   },
+
   galleryContainer: {
     padding: 10,
-    backgroundColor: COLORS.whiteBackground,
   },
+
   galleryItem: {
     flex: 1,
     margin: 4,
     borderRadius: 12,
     overflow: 'hidden',
-    backgroundColor: COLORS.whiteBackground,
-    // elevation: 1,
   },
+
   itemSpacing: {
     marginRight: 4,
   },
+
   galleryImage: {
     width: '100%',
     height: 120,
-    backgroundColor: COLORS.gray,
-    resizeMode: 'contain',
+    resizeMode: 'cover',
   },
-  modalContainer: {
-    flex: 1,
+
+  // FULL SCREEN MODE
+  fullScreenContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width,
+    height,
+    backgroundColor: '#000',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.9)',
   },
-  modalBackground: {
-    ...StyleSheet.absoluteFillObject,
-  },
-  modalContent: {
-    width: width * 0.9,
-    height: height * 0.85,
-    backgroundColor: COLORS.whiteBackground,
-    borderRadius: 20,
-    overflow: 'hidden',
-  },
-  modalImageContainer: {
-    flex: 1,
-  },
-  modalImage: {
-    width: '100%',
-    height: '100%',
+
+  fullScreenImage: {
+    width,
+    height,
     resizeMode: 'contain',
   },
-  imageInfo: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 15,
-    borderTopWidth: 1,
-    borderTopColor: COLORS.gray,
-  },
-  textContainer: {
-    flex: 1,
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: COLORS.dark,
-  },
-  downloadButton: {
-    backgroundColor: COLORS.primary,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 10,
-  },
-  downloadButtonText: {
-    color: '#000',
-    fontSize: 14,
-    fontWeight: '600',
-  },
+
   closeButton: {
     position: 'absolute',
-    top: 10,
-    right: 10,
-    width: 35,
-    height: 35,
-    borderRadius: 20,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    top: 40,
+    right: 20,
+    zIndex: 99,
   },
-  closeButtonText: {
-    color: COLORS.whiteBackground,
-    fontSize: 18,
-    fontWeight: 'bold',
+
+  leftNav: {
+    position: 'absolute',
+    left: 10,
+    top: height / 2 - 20,
+  },
+
+  rightNav: {
+    position: 'absolute',
+    right: 10,
+    top: height / 2 - 20,
+  },
+
+  counter: {
+    position: 'absolute',
+    bottom: 30,
+    fontSize: 16,
+    color: '#fff',
   },
 });
 

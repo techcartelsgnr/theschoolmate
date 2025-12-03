@@ -7,45 +7,46 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0C80B921A6F3F58F76C31292 /* libPods-theschoolmate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-theschoolmate.a */; };
-		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
-		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		DBBA7188234745B785DD0891 /* InterTight-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0E496865451F492F8C37FB16 /* InterTight-Bold.ttf */; };
 		034C2D1F9A964F18A10842CE /* InterTight-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DD690275E4404EFBAC61B126 /* InterTight-Medium.ttf */; };
-		570570120C7F46229125B5B0 /* InterTight-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E62CB7B064634D7881AF56DC /* InterTight-Regular.ttf */; };
 		0B6CA00D38B44E90AFD87AA9 /* NunitoSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E7A0B3287A0F469AB6C7EA97 /* NunitoSans-Italic.ttf */; };
+		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		1CD7E2BE6B944B40A2CF031B /* NunitoSans.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0312B109719C4ABEB28DC659 /* NunitoSans.ttf */; };
-		E6DDBE4B40724593A0448F75 /* Quicksand-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BDCB6FDEF8634E5C9C2A1AE4 /* Quicksand-Bold.ttf */; };
-		73CAA9735AE34AC08C9F82AE /* Quicksand-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 89249351FE9744DF9E5C40BA /* Quicksand-Medium.ttf */; };
+		570570120C7F46229125B5B0 /* InterTight-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E62CB7B064634D7881AF56DC /* InterTight-Regular.ttf */; };
 		60FA96AE711745DF822F031B /* Quicksand-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0825551457994E79A7194129 /* Quicksand-Regular.ttf */; };
 		6692FED0AF6847E0A3EA7895 /* Quicksand-VariableFont_wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B0573DAD94234875B0F00602 /* Quicksand-VariableFont_wght.ttf */; };
+		73CAA9735AE34AC08C9F82AE /* Quicksand-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 89249351FE9744DF9E5C40BA /* Quicksand-Medium.ttf */; };
+		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
+		7839AAD147B1E55FA40A8B42 /* libPods-theschoolmate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B63E0E19D935D373685620AD /* libPods-theschoolmate.a */; };
+		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		8A3BFA99350C4DFEBF41A2C6 /* TiroDevanagariHindi-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 838567BE226445C983294BCB /* TiroDevanagariHindi-Italic.ttf */; };
+		C06E310810F6FE7AF2791649 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
+		DBBA7188234745B785DD0891 /* InterTight-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0E496865451F492F8C37FB16 /* InterTight-Bold.ttf */; };
 		E33A16CD1FEA47C3A95F6CDF /* TiroDevanagariHindi-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6BB11BB1D3984965A8568CD8 /* TiroDevanagariHindi-Regular.ttf */; };
+		E6DDBE4B40724593A0448F75 /* Quicksand-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BDCB6FDEF8634E5C9C2A1AE4 /* Quicksand-Bold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0312B109719C4ABEB28DC659 /* NunitoSans.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = NunitoSans.ttf; path = ../assets/fonts/NunitoSans.ttf; sourceTree = "<group>"; };
+		0825551457994E79A7194129 /* Quicksand-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Quicksand-Regular.ttf"; path = "../assets/fonts/Quicksand-Regular.ttf"; sourceTree = "<group>"; };
+		0E496865451F492F8C37FB16 /* InterTight-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "InterTight-Bold.ttf"; path = "../assets/fonts/InterTight-Bold.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* theschoolmate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = theschoolmate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = theschoolmate/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = theschoolmate/Info.plist; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = theschoolmate/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		3B4392A12AC88292D35C810B /* Pods-theschoolmate.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-theschoolmate.debug.xcconfig"; path = "Target Support Files/Pods-theschoolmate/Pods-theschoolmate.debug.xcconfig"; sourceTree = "<group>"; };
-		5709B34CF0A7D63546082F79 /* Pods-theschoolmate.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-theschoolmate.release.xcconfig"; path = "Target Support Files/Pods-theschoolmate/Pods-theschoolmate.release.xcconfig"; sourceTree = "<group>"; };
-		5DCACB8F33CDC322A6C60F78 /* libPods-theschoolmate.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-theschoolmate.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3F6B950AB81337834E53B591 /* Pods-theschoolmate.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-theschoolmate.debug.xcconfig"; path = "Target Support Files/Pods-theschoolmate/Pods-theschoolmate.debug.xcconfig"; sourceTree = "<group>"; };
+		4C329F9167F921C15D9B82F2 /* Pods-theschoolmate.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-theschoolmate.release.xcconfig"; path = "Target Support Files/Pods-theschoolmate/Pods-theschoolmate.release.xcconfig"; sourceTree = "<group>"; };
+		6BB11BB1D3984965A8568CD8 /* TiroDevanagariHindi-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "TiroDevanagariHindi-Regular.ttf"; path = "../assets/fonts/TiroDevanagariHindi-Regular.ttf"; sourceTree = "<group>"; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = theschoolmate/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = theschoolmate/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		838567BE226445C983294BCB /* TiroDevanagariHindi-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "TiroDevanagariHindi-Italic.ttf"; path = "../assets/fonts/TiroDevanagariHindi-Italic.ttf"; sourceTree = "<group>"; };
+		89249351FE9744DF9E5C40BA /* Quicksand-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Quicksand-Medium.ttf"; path = "../assets/fonts/Quicksand-Medium.ttf"; sourceTree = "<group>"; };
+		B0573DAD94234875B0F00602 /* Quicksand-VariableFont_wght.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Quicksand-VariableFont_wght.ttf"; path = "../assets/fonts/Quicksand-VariableFont_wght.ttf"; sourceTree = "<group>"; };
+		B63E0E19D935D373685620AD /* libPods-theschoolmate.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-theschoolmate.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BDCB6FDEF8634E5C9C2A1AE4 /* Quicksand-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Quicksand-Bold.ttf"; path = "../assets/fonts/Quicksand-Bold.ttf"; sourceTree = "<group>"; };
+		DD690275E4404EFBAC61B126 /* InterTight-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "InterTight-Medium.ttf"; path = "../assets/fonts/InterTight-Medium.ttf"; sourceTree = "<group>"; };
+		E62CB7B064634D7881AF56DC /* InterTight-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "InterTight-Regular.ttf"; path = "../assets/fonts/InterTight-Regular.ttf"; sourceTree = "<group>"; };
+		E7A0B3287A0F469AB6C7EA97 /* NunitoSans-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-Italic.ttf"; path = "../assets/fonts/NunitoSans-Italic.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		0E496865451F492F8C37FB16 /* InterTight-Bold.ttf */ = {isa = PBXFileReference; name = "InterTight-Bold.ttf"; path = "../assets/fonts/InterTight-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		DD690275E4404EFBAC61B126 /* InterTight-Medium.ttf */ = {isa = PBXFileReference; name = "InterTight-Medium.ttf"; path = "../assets/fonts/InterTight-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		E62CB7B064634D7881AF56DC /* InterTight-Regular.ttf */ = {isa = PBXFileReference; name = "InterTight-Regular.ttf"; path = "../assets/fonts/InterTight-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		E7A0B3287A0F469AB6C7EA97 /* NunitoSans-Italic.ttf */ = {isa = PBXFileReference; name = "NunitoSans-Italic.ttf"; path = "../assets/fonts/NunitoSans-Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		0312B109719C4ABEB28DC659 /* NunitoSans.ttf */ = {isa = PBXFileReference; name = "NunitoSans.ttf"; path = "../assets/fonts/NunitoSans.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		BDCB6FDEF8634E5C9C2A1AE4 /* Quicksand-Bold.ttf */ = {isa = PBXFileReference; name = "Quicksand-Bold.ttf"; path = "../assets/fonts/Quicksand-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		89249351FE9744DF9E5C40BA /* Quicksand-Medium.ttf */ = {isa = PBXFileReference; name = "Quicksand-Medium.ttf"; path = "../assets/fonts/Quicksand-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		0825551457994E79A7194129 /* Quicksand-Regular.ttf */ = {isa = PBXFileReference; name = "Quicksand-Regular.ttf"; path = "../assets/fonts/Quicksand-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		B0573DAD94234875B0F00602 /* Quicksand-VariableFont_wght.ttf */ = {isa = PBXFileReference; name = "Quicksand-VariableFont_wght.ttf"; path = "../assets/fonts/Quicksand-VariableFont_wght.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		838567BE226445C983294BCB /* TiroDevanagariHindi-Italic.ttf */ = {isa = PBXFileReference; name = "TiroDevanagariHindi-Italic.ttf"; path = "../assets/fonts/TiroDevanagariHindi-Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		6BB11BB1D3984965A8568CD8 /* TiroDevanagariHindi-Regular.ttf */ = {isa = PBXFileReference; name = "TiroDevanagariHindi-Regular.ttf"; path = "../assets/fonts/TiroDevanagariHindi-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,7 +54,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C80B921A6F3F58F76C31292 /* libPods-theschoolmate.a in Frameworks */,
+				7839AAD147B1E55FA40A8B42 /* libPods-theschoolmate.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,9 +77,28 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				5DCACB8F33CDC322A6C60F78 /* libPods-theschoolmate.a */,
+				B63E0E19D935D373685620AD /* libPods-theschoolmate.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6942E8978C1E4419B78F8901 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				0E496865451F492F8C37FB16 /* InterTight-Bold.ttf */,
+				DD690275E4404EFBAC61B126 /* InterTight-Medium.ttf */,
+				E62CB7B064634D7881AF56DC /* InterTight-Regular.ttf */,
+				E7A0B3287A0F469AB6C7EA97 /* NunitoSans-Italic.ttf */,
+				0312B109719C4ABEB28DC659 /* NunitoSans.ttf */,
+				BDCB6FDEF8634E5C9C2A1AE4 /* Quicksand-Bold.ttf */,
+				89249351FE9744DF9E5C40BA /* Quicksand-Medium.ttf */,
+				0825551457994E79A7194129 /* Quicksand-Regular.ttf */,
+				B0573DAD94234875B0F00602 /* Quicksand-VariableFont_wght.ttf */,
+				838567BE226445C983294BCB /* TiroDevanagariHindi-Italic.ttf */,
+				6BB11BB1D3984965A8568CD8 /* TiroDevanagariHindi-Regular.ttf */,
+			);
+			name = Resources;
+			path = "";
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -114,30 +134,11 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				3B4392A12AC88292D35C810B /* Pods-theschoolmate.debug.xcconfig */,
-				5709B34CF0A7D63546082F79 /* Pods-theschoolmate.release.xcconfig */,
+				3F6B950AB81337834E53B591 /* Pods-theschoolmate.debug.xcconfig */,
+				4C329F9167F921C15D9B82F2 /* Pods-theschoolmate.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
-		};
-		6942E8978C1E4419B78F8901 /* Resources */ = {
-			isa = "PBXGroup";
-			children = (
-				0E496865451F492F8C37FB16 /* InterTight-Bold.ttf */,
-				DD690275E4404EFBAC61B126 /* InterTight-Medium.ttf */,
-				E62CB7B064634D7881AF56DC /* InterTight-Regular.ttf */,
-				E7A0B3287A0F469AB6C7EA97 /* NunitoSans-Italic.ttf */,
-				0312B109719C4ABEB28DC659 /* NunitoSans.ttf */,
-				BDCB6FDEF8634E5C9C2A1AE4 /* Quicksand-Bold.ttf */,
-				89249351FE9744DF9E5C40BA /* Quicksand-Medium.ttf */,
-				0825551457994E79A7194129 /* Quicksand-Regular.ttf */,
-				B0573DAD94234875B0F00602 /* Quicksand-VariableFont_wght.ttf */,
-				838567BE226445C983294BCB /* TiroDevanagariHindi-Italic.ttf */,
-				6BB11BB1D3984965A8568CD8 /* TiroDevanagariHindi-Regular.ttf */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-			path = "";
 		};
 /* End PBXGroup section */
 
@@ -146,13 +147,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "theschoolmate" */;
 			buildPhases = (
-				C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */,
+				CAAA0282360DDF4FEEAD1B7E /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
-				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
+				2B73A0F56BD20EB65C1B3943 /* [CP] Embed Pods Frameworks */,
+				EB50C52CD4FFEF60F515140B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -212,6 +213,7 @@
 				6692FED0AF6847E0A3EA7895 /* Quicksand-VariableFont_wght.ttf in Resources */,
 				8A3BFA99350C4DFEBF41A2C6 /* TiroDevanagariHindi-Italic.ttf in Resources */,
 				E33A16CD1FEA47C3A95F6CDF /* TiroDevanagariHindi-Regular.ttf in Resources */,
+				C06E310810F6FE7AF2791649 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -234,7 +236,7 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */ = {
+		2B73A0F56BD20EB65C1B3943 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -251,7 +253,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-theschoolmate/Pods-theschoolmate-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */ = {
+		CAAA0282360DDF4FEEAD1B7E /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -273,7 +275,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E235C05ADACE081382539298 /* [CP] Copy Pods Resources */ = {
+		EB50C52CD4FFEF60F515140B /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -306,10 +308,12 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3B4392A12AC88292D35C810B /* Pods-theschoolmate.debug.xcconfig */;
+			baseConfigurationReference = 3F6B950AB81337834E53B591 /* Pods-theschoolmate.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_EMPTY_BODY = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = theschoolmate/Info.plist;
@@ -334,10 +338,12 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5709B34CF0A7D63546082F79 /* Pods-theschoolmate.release.xcconfig */;
+			baseConfigurationReference = 4C329F9167F921C15D9B82F2 /* Pods-theschoolmate.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_EMPTY_BODY = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = theschoolmate/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
@@ -427,7 +433,10 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				USE_HERMES = true;
 			};
 			name = Debug;
 		};
@@ -492,7 +501,9 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

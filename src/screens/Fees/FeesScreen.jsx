@@ -83,6 +83,18 @@ export default function FeesScreen({ navigation }) {
             ))}
           </View>
         </ScrollView>
+        {/* ---------- Bottom Pay Bar ---------- */}
+<View style={styles.payBar}>
+  <View>
+    <Text style={styles.totalDueText}>Total Due</Text>
+    <Text style={styles.totalDueAmount}>₹ 15,000</Text>
+  </View>
+
+  <TouchableOpacity style={styles.payButton}>
+    <Text style={styles.payButtonText}>Pay Now</Text>
+  </TouchableOpacity>
+</View>
+
       </SafeAreaView>
     </>
   );
@@ -102,7 +114,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.whiteBackground,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
-    elevation: 1,
+    
   },
   backButton: {
     padding: 4,
@@ -193,4 +205,44 @@ const styles = StyleSheet.create({
     color: '#888',
     marginTop: 2,
   },
+  payBar: {
+  position: 'absolute',
+  bottom: 20,
+  left: 0,
+  right: 0,
+  backgroundColor: '#fff',
+  paddingVertical: 12,
+  paddingHorizontal: 20,
+  borderTopWidth: 1,
+  borderTopColor: '#e0e0e0',
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+},
+
+totalDueText: {
+  fontSize: 13,
+  color: '#555',
+  fontFamily: 'Quicksand-Medium',
+},
+
+totalDueAmount: {
+  fontSize: 20,
+  fontFamily: 'InterTight-Bold',
+  color: COLORS.primary || '#3b82f6',
+},
+
+payButton: {
+  backgroundColor: COLORS.primary || '#3b82f6',
+  paddingVertical: 10,
+  paddingHorizontal: 22,
+  borderRadius: 8,
+},
+
+payButtonText: {
+  color: '#fff',
+  fontSize: 16,
+  fontFamily: 'Quicksand-Bold',
+},
+
 });

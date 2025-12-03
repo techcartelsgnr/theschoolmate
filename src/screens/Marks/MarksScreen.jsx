@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { COLORS, Spacing } from '../../theme/theme';
+import { COLORS } from '../../theme/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 
@@ -30,13 +30,36 @@ const SubjectCard = ({ icon, subject, grade }) => (
 
 export default function MarksScreen() {
   const navigation = useNavigation();
+
+  // -----------------------------
+  // 🔥 DATA FOR EACH TERM
+  // -----------------------------
+  const term1Subjects = [
+    { icon: 'calculate', subject: 'Mathematics', grade: 'A+' },
+    { icon: 'science', subject: 'Science', grade: 'A' },
+    { icon: 'history-edu', subject: 'History', grade: 'B+' },
+    { icon: 'computer', subject: 'Computer Science', grade: 'A-' },
+  ];
+
+  const term2Subjects = [
+    { icon: 'calculate', subject: 'Mathematics', grade: 'A' },
+    { icon: 'science', subject: 'Science', grade: 'A-' },
+    { icon: 'history-edu', subject: 'History', grade: 'A' },
+    { icon: 'computer', subject: 'Computer Science', grade: 'A+' },
+  ];
+
+  // Which term is active
+  const [activeTerm, setActiveTerm] = useState('Term1');
+
+  // Get data based on selected term
+  const currentSubjects =
+    activeTerm === 'Term1' ? term1Subjects : term2Subjects;
+
   return (
     <>
-      <StatusBar
-        backgroundColor={COLORS.whiteBackground}
-        barStyle="dark-content"
-      />
+      <StatusBar backgroundColor={COLORS.whiteBackground} barStyle="dark-content" />
       <SafeAreaView style={styles.safeArea}>
+
         {/* Header */}
         <View style={styles.headerAtten}>
           <TouchableOpacity
@@ -47,37 +70,59 @@ export default function MarksScreen() {
           </TouchableOpacity>
 
           <Text style={styles.headerTitleAtten}>Marks</Text>
-
           <View style={{ width: '15%' }} />
         </View>
+
+        {/* Tabs */}
         <View style={styles.tabs}>
-          <TouchableOpacity style={[styles.tab, styles.tabActive]}>
-            <Text style={styles.tabActiveText}>Term 1</Text>
+          <TouchableOpacity
+            style={[styles.tab, activeTerm === 'Term1' && styles.tabActive]}
+            onPress={() => setActiveTerm('Term1')}
+          >
+            <Text style={activeTerm === 'Term1' ? styles.tabActiveText : styles.tabText}>
+              Term 1
+            </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.tab}>
-            <Text style={styles.tabText}>Term 2</Text>
+
+          <TouchableOpacity
+            style={[styles.tab, activeTerm === 'Term2' && styles.tabActive]}
+            onPress={() => setActiveTerm('Term2')}
+          >
+            <Text style={activeTerm === 'Term2' ? styles.tabActiveText : styles.tabText}>
+              Term 2
+            </Text>
           </TouchableOpacity>
+
           <TouchableOpacity style={styles.tab}>
             <Text style={styles.tabText}>2024-25</Text>
           </TouchableOpacity>
         </View>
+
+        {/* Summary */}
         <View style={styles.summaryCard}>
           <Text style={styles.summaryTitle}>Overall Summary</Text>
           <Text style={styles.summaryPercent}>88%</Text>
           <Text style={styles.summaryGrade}>Grade A</Text>
         </View>
+
+        {/* Subject List */}
         <ScrollView style={styles.body}>
           <Text style={styles.sectionTitle}>Subject Performance</Text>
-          <SubjectCard icon="calculate" subject="Mathematics" grade="A+" />
-          <SubjectCard icon="science" subject="Science" grade="A-" />
-          <SubjectCard icon="science" subject="Science" grade="A+" />
-          <SubjectCard icon="history-edu" subject="History" grade="B+" />
-          <SubjectCard icon="computer" subject="Computer Science" grade="A-" />
+
+          {currentSubjects.map((item, index) => (
+            <SubjectCard
+              key={index}
+              icon={item.icon}
+              subject={item.subject}
+              grade={item.grade}
+            />
+          ))}
         </ScrollView>
       </SafeAreaView>
     </>
   );
 }
+
 
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: '#f5f6fa' },
@@ -90,7 +135,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.whiteBackground,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
-    elevation: 1,
+    
   },
 
   backButtonAtten: { padding: 4 },

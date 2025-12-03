@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -8,55 +8,42 @@ import {
   Dimensions,
   Image,
   TouchableOpacity,
+  BackHandler,
+  ToastAndroid,
+  Modal,
+  Animated,
+  RefreshControl
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { COLORS, Spacing } from '../../theme/theme';
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from '../../redux/slices/authSlice';
+import Slider from '../../components/Slider';
+import { BlurView } from "@react-native-community/blur";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { fetchSchoolInfo } from "../../redux/slices/commonSlice";
+import { NotificationScreen } from '../index';
+
+
+
 
 const { width, height } = Dimensions.get('window');
 
-// Array of categories with navigation target
+// Home categories
 const categories = [
-  {
-    title: 'Dashboard',
-    image: require('../../../assets/homeicon/dashboard.png'),
-    screen: 'DashboardScreen',
-  },
-  {
-    title: 'Attendance',
-    image: require('../../../assets/homeicon/attendancescreen.png'),
-    screen: 'AttendanceScreen',
-  },
-  {
-    title: 'Fee Details',
-    image: require('../../../assets/homeicon/feescreen.png'),
-    screen: 'FeesScreen',
-  },
-  {
-    title: 'Examination',
-    image: require('../../../assets/homeicon/examination.png'),
-    screen: 'MarksScreen',
-  },
-  {
-    title: 'Report Cards',
-    image: require('../../../assets/homeicon/report.png'),
-    screen: 'ReportCardScreen',
-  },
-  {
-    title: 'Profile',
-    image: require('../../../assets/homeicon/profilescreen.png'),
-    screen: 'ProfileScreen',
-  },
-  {
-    title: 'Notice Board',
-    image: require('../../../assets/homeicon/notice.png'),
-    screen: 'NoticeBoardScreen',
-  },
-  {
-    title: 'Gallery',
-    image: require('../../../assets/homeicon/gallery.png'),
-    screen: 'GalleryScreen',
-  },
+  // { title: 'Dashboard', image: require('../../../assets/homeicon/dashboard.png'), screen: 'DashboardScreen' },
+  { title: 'Attendance', image: require('../../../assets/homeicon/attendancescreen.png'), screen: 'AttendanceScreen' },
+  { title: 'Fee Details', image: require('../../../assets/homeicon/feescreen.png'), screen: 'FeesScreen' },
+  { title: 'Examination', image: require('../../../assets/homeicon/examination.png'), screen: 'MarksScreen' },
+  { title: 'Report Cards', image: require('../../../assets/homeicon/report.png'), screen: 'ReportCardScreen' },
+  { title: 'Profile', image: require('../../../assets/homeicon/profilescreen.png'), screen: 'ProfileScreen' },
+  { title: 'Notice Board', image: require('../../../assets/homeicon/notice.png'), screen: 'NoticeBoardScreen' },
+  { title: 'Gallery', image: require('../../../assets/homeicon/gallery.png'), screen: 'GalleryScreen' },
+  { title: 'Blog', image: require('../../../assets/homeicon/blog.png'), screen: 'BlogScreen' },
+  { title: 'Article', image: require('../../../assets/homeicon/article.png'), screen: 'ArticleScreen' },
+  { title: 'Events', image: require('../../../assets/homeicon/event.png'), screen: 'EventsScreen' },
+  { title: 'School Info', image: require('../../../assets/homeicon/information.png'), screen: 'SchoolInfoScreen' },
 ];
 
 const CATEGORY_COLORS = [
@@ -68,70 +55,111 @@ const CATEGORY_COLORS = [
   '#0006baff',
   '#00966cff',
   '#ff0000ff',
-  '#4cd137',
   '#e84118',
-  // add more colors as needed
 ];
 
 export default function HomeScreen() {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const { token } = useSelector(state => state.auth);
+  const { name, studentclass, section, image } = useSelector(state => state.auth);
+
+  const [exitModal, setExitModal] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+
+  useEffect(() => {
+    if (token) {
+      dispatch(fetchSchoolInfo(token));
+    }
+  }, [token]);
+
+  // 🔥 Handle Back Button Press (show exit modal)
+  useEffect(() => {
+    const backAction = () => {
+      setExitModal(true);
+      return true; // block default back
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
+  const exitApp = () => {
+    setExitModal(false);
+    BackHandler.exitApp();
+  };
+
+  const cancelExit = () => {
+    setExitModal(false);
+  };
+
+  const onRefresh = () => {
+    setRefreshing(true);
+
+    // wait a little to mimic reloading
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 800);
+  };
+
+
 
   return (
     <>
-      <StatusBar
-        backgroundColor={COLORS.whiteBackground}
-        barStyle="dark-content"
-      />
+      <StatusBar backgroundColor={COLORS.whiteBackground} barStyle="dark-content" />
       <SafeAreaView style={styles.safeArea}>
+
+        {/* Header */}
         <View style={styles.homeHeader}>
-          <Image
-            source={require('../../../assets/images/khushbuverma.jpg')}
-            style={styles.homelogo}
-            resizeMode="contain"
-          />
-          <View style={styles.homeHeaderRight}>
-            <Text style={styles.headerRightTitle}>Welcome, Suhani Mehra</Text>
-            <Text style={styles.headerRightClass}>Class 10-A</Text>
+          <View style={styles.homeLeftHeader}>
+            <Image source={{ uri: image }} style={styles.homelogo} resizeMode="contain" />
+            <View style={styles.homeHeaderRight}>
+              <Text style={styles.headerRightTitle}>Welcome, {name}</Text>
+              <Text style={styles.headerRightClass}>{studentclass} - {section}</Text>
+            </View>
           </View>
+          <TouchableOpacity onPress={() => navigation.navigate(NotificationScreen)}>
+            <Ionicons name="notifications" size={24} color={COLORS.whiteBackground} />
+          </TouchableOpacity>
         </View>
 
-        <ScrollView contentContainerStyle={styles.container}>
-          <View style={styles.schoolHome}>
-            <Image
-              source={require('../../../assets/images/logo.png')}
-              style={styles.schoollogo}
-              resizeMode="contain"
+        <ScrollView contentContainerStyle={styles.container}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={[COLORS.success]}
             />
-            <Text style={styles.schoolTitle}>Monther's Pride School</Text>
-            <Text style={styles.schoolAddress}>
-              Shop Number D-16, Sector 17 Market, Sri Ganganagar, Rajasthan
-            </Text>
+          }
+        >
+          <View style={{ marginBottom: 20 }}>
+            <Slider />
           </View>
 
+
+          {/* Attendance Box */}
           <View style={styles.homeAttenBox}>
             <Text style={styles.homeAttenTitle}>Attendance SnapShot</Text>
             <Text style={styles.homeAttenPerc}>90%</Text>
           </View>
 
+          {/* Category Grid */}
           <View style={styles.fullView}>
             {categories.map((item, index) => (
               <TouchableOpacity
                 key={index}
                 style={[
                   styles.schoolCategory,
-                  {
-                    backgroundColor:
-                      CATEGORY_COLORS[index % CATEGORY_COLORS.length],
-                  },
+                  { backgroundColor: CATEGORY_COLORS[index % CATEGORY_COLORS.length] },
                 ]}
                 onPress={() => navigation.navigate(item.screen)}
               >
                 <View style={styles.cateImage}>
-                  <Image
-                    source={item.image}
-                    style={styles.logo}
-                    resizeMode="contain"
-                  />
+                  <Image source={item.image} style={styles.logo} resizeMode="contain" />
                 </View>
                 <Text style={styles.catTitle}>{item.title}</Text>
               </TouchableOpacity>
@@ -139,138 +167,109 @@ export default function HomeScreen() {
           </View>
         </ScrollView>
       </SafeAreaView>
+
+      {/* 🔥 EXIT CONFIRMATION MODAL */}
+      <Modal transparent animationType="fade" visible={exitModal}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalBox}>
+            <Text style={styles.modalTitle}>Exit App</Text>
+            <Text style={styles.modalMessage}>Are you sure you want to exit?</Text>
+
+            <View style={styles.modalButtonsContainer}>
+              <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={cancelExit}>
+                <Text style={styles.modalButtonText}>No</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={[styles.modalButton, styles.exitButton]} onPress={exitApp}>
+                <Text style={[styles.modalButtonText, { color: "#fff" }]}>Yes</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    // backgroundColor: COLORS.cardBackground,
-    // height: height * 1,
-    flex: 1,
-  },
-  container: {
-    flexGrow: 1,
-    backgroundColor: COLORS.whiteBackground,
-    padding: 10,
-  },
-  schoolHome: {
-    backgroundColor: COLORS.cardBackground,
-    paddingVertical: 20,
-    paddingHorizontal: 16,
-    borderRadius: 14,
-    marginHorizontal: 0,
-    marginBottom: 10,
-    alignItems: 'center',
-  },
+  safeArea: { flex: 1, paddingBottom: 50 },
+  container: { flexGrow: 1, backgroundColor: COLORS.whiteBackground, padding: 10 },
 
-  logoContainer: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    backgroundColor: COLORS.white,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 12,
-
-    // Border ring around logo
-    borderWidth: 2,
-    borderColor: COLORS.primary,
-  },
-
-  schoollogo: {
-    width: 45,
-    height: 45,
-  },
-
-  schoolTitle: {
-    fontSize: 18,
-    color: COLORS.whiteBackground,
-    fontFamily: 'Quicksand-Bold',
-    marginBottom: 6,
-    textAlign: 'center',
-  },
-
-  schoolAddress: {
-    fontSize: 13,
-    color: COLORS.textSecondary,
-    fontFamily: 'Quicksand-Medium',
-    textAlign: 'center',
-    lineHeight: 18,
-    width: '90%',
-  },
-
-  fullView: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-  },
-  schoolCategory: {
-    alignItems: 'center',
-    marginBottom: 10,
-    width: width * 0.29,
-    backgroundColor: COLORS.background,
-    borderRadius: 5,
-    paddingVertical: 15,
-  },
-  cateImage: {
-    // width: 50,
-    // height: 50,
-    // backgroundColor: COLORS.whiteBackground,
-    // borderRadius: 100,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  logo: {
-    width: 42,
-    height: 42,
-  },
-  catTitle: {
-    fontSize: Spacing.forteen,
-    color: COLORS.textPrimary,
-    fontFamily: 'Quicksand-Bold',
-    marginTop: 8,
-    textAlign: 'center',
-  },
+  // HEADER
   homeHeader: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: 10,
     paddingVertical: 10,
     borderBottomWidth: 1,
     backgroundColor: COLORS.cardBackground,
   },
-  homelogo: {
-    width: 45,
-    height: 45,
-    borderRadius: 100,
+  homeLeftHeader:{
+    flexDirection: 'row',
+    alignItems: 'center',
   },
+  homelogo: { width: 45, height: 45, borderRadius: 100 },
   homeHeaderRight: { marginLeft: 10 },
   headerRightTitle: {
-    fontSize: Spacing.medium,
-    color: COLORS.textPrimary,
-    fontFamily: 'InterTight-Bold',
+    fontSize: Spacing.medium, color: COLORS.textPrimary, fontFamily: 'InterTight-Bold'
   },
-  headerRightClass: {
-    fontSize: Spacing.medium,
-    color: COLORS.textPrimary,
+  headerRightClass: { fontSize: Spacing.medium, color: COLORS.textPrimary, fontFamily: 'Quicksand-Bold' },
+
+  homeAttenBox: { padding: 10, backgroundColor: COLORS.grayBackground, marginBottom: 20 },
+  homeAttenTitle: { fontSize: Spacing.xl, color: COLORS.whiteBackground, fontFamily: 'Quicksand-Bold', textAlign: 'center' },
+  homeAttenPerc: { fontSize: Spacing.xl, color: COLORS.whiteBackground, fontFamily: 'Quicksand-Bold', textAlign: 'center' },
+
+  fullView: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-around' },
+  schoolCategory: { alignItems: 'center', marginBottom: 10, width: width * 0.29, borderRadius: 5, paddingVertical: 15 },
+  logo: { width: 42, height: 42 },
+  catTitle: {
+    fontSize: Spacing.forteen,
+    color: COLORS.whiteBackground,
     fontFamily: 'Quicksand-Bold',
+    marginTop: 8,
+    textAlign: 'center',
   },
-  homeAttenBox: {
-    padding: 10,
-    backgroundColor: COLORS.grayBackground,
+
+  // MODAL STYLES
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.45)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalBox: {
+    width: '80%',
+    backgroundColor: '#fff',
+    padding: 25,
+    borderRadius: 14,
+    elevation: 8,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontFamily: 'Quicksand-Bold',
+    color: COLORS.textDark,
+    marginBottom: 10,
+  },
+  modalMessage: {
+    fontSize: 15,
+    fontFamily: 'InterTight-Medium',
+    color: COLORS.textDark,
     marginBottom: 20,
   },
-  homeAttenTitle: {
-    fontSize: Spacing.xl,
-    color: COLORS.whiteBackground,
-    fontFamily: 'Quicksand-Bold',
-    textAlign: 'center',
+  modalButtonsContainer: { flexDirection: 'row', justifyContent: 'space-between' },
+  modalButton: { flex: 1, paddingVertical: 12, marginHorizontal: 5, borderRadius: 10, alignItems: 'center' },
+  cancelButton: { backgroundColor: COLORS.grayBG },
+  exitButton: { backgroundColor: '#ff4e76' },
+  modalButtonText: { fontSize: 16, fontFamily: 'Quicksand-Bold' },
+  marqueeContainer: {
+    backgroundColor: '#e1f5fe',
+    borderRadius: 8,
+    marginBottom: 20,
   },
-  homeAttenPerc: {
-    fontSize: Spacing.xl,
-    color: COLORS.whiteBackground,
-    fontFamily: 'Quicksand-Bold',
-    textAlign: 'center',
+  marqueeText: {
+    fontSize: 16,
+    color: '#0277bd',
+    fontWeight: '600',
   },
 });

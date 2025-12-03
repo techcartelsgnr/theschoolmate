@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -8,58 +8,71 @@ import {
   ScrollView,
   Linking,
   StatusBar,
+  Modal,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { COLORS, Spacing } from '../../theme/theme';
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from '../../redux/slices/authSlice';
 
 export default function ProfileScreen({ navigation }) {
-  const user = {
-    name: 'Yogita Shaje',
-    classSection: 'Class VII B',
-    profileImage: require('../../../assets/images/khushbuverma.jpg'),
-    rollNumber: '0175',
-    dob: '10 Oct 1996',
-    bloodGroup: 'B+',
-    emergencyContact: '+91 9812345678',
-    position: '12th',
-    fatherName: 'Mr. Raj Shaje',
-    motherName: 'Mrs. Priya Shaje',
+
+  const dispatch = useDispatch();
+  const token = useSelector(state => state.auth.token);
+
+  const {
+    name,
+    studentclass,
+    section,
+    image,
+    dob,
+    bloodGroup,
+    fathername,
+    mothername,
+    rollnumber,
+    emergencynumber,
+    mobile,
+    email,
+  } = useSelector(state => state.auth);
+
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleLogout = () => {
+    setModalVisible(false);
+    dispatch(logout({ token }));
   };
 
   const infoRows = [
-    { label: 'Roll Number', value: user.rollNumber },
-    { label: 'Date of Birth', value: user.dob },
-    { label: 'Blood Group', value: user.bloodGroup },
+    { label: "Roll Number", value: rollnumber },
+    { label: "Date of Birth", value: dob },
+    { label: "Blood Group", value: bloodGroup },
     {
-      label: 'Emergency Contact',
+      label: "Emergency Contact",
       value: (
         <Text
           style={styles.link}
-          onPress={() => Linking.openURL(`tel:${user.emergencyContact}`)}
+          onPress={() => Linking.openURL(`tel:${emergencynumber}`)}
         >
-          {user.emergencyContact}
+          {emergencynumber}
         </Text>
       ),
     },
-    { label: 'Position in Class', value: user.position },
-    { label: "Father's Name", value: user.fatherName },
-    { label: "Mother's Name", value: user.motherName },
+    { label: "Father's Name", value: fathername },
+    { label: "Mother's Name", value: mothername },
+    { label: "Mobile Number", value: mobile },
+    { label: "Email Id", value: email },
   ];
 
   return (
     <>
-      <StatusBar
-        backgroundColor={COLORS.whiteBackground}
-        barStyle="dark-content"
-      />
+      <StatusBar backgroundColor={COLORS.whiteBackground} barStyle="dark-content" />
+
       <SafeAreaView style={styles.safe}>
+        
         {/* Header */}
         <View style={styles.headerAtten}>
-          <TouchableOpacity
-            style={styles.backButtonAtten}
-            onPress={() => navigation.goBack()}
-          >
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <Ionicons name="arrow-back" size={24} color={COLORS.textDark} />
           </TouchableOpacity>
 
@@ -69,12 +82,26 @@ export default function ProfileScreen({ navigation }) {
         </View>
 
         <ScrollView contentContainerStyle={styles.container}>
+          
+          {/* Profile Image */}
           <View style={styles.avatarContainer}>
-            <Image source={user.profileImage} style={styles.avatar} />
-            <Text style={styles.name}>{user.name}</Text>
-            <Text style={styles.classSection}>{user.classSection}</Text>
+            <Image
+              source={
+                image
+                  ? { uri: image }
+                  : require('../../../assets/images/khushbuverma.jpg')
+              }
+              style={styles.avatar}
+            />
+
+            <Text style={styles.name}>{name}</Text>
+
+            <Text style={styles.classSection}>
+              Class {studentclass}-{section}
+            </Text>
           </View>
 
+          {/* Info Box */}
           <View style={styles.infoBox}>
             {infoRows.map((item, idx) => (
               <InfoRow
@@ -86,11 +113,51 @@ export default function ProfileScreen({ navigation }) {
             ))}
           </View>
 
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Ask for Update</Text>
+          {/* Logout Button  */}
+          <TouchableOpacity style={styles.button} onPress={() => setModalVisible(true)}>
+            <Text style={styles.buttonText}>Logout</Text>
           </TouchableOpacity>
+
         </ScrollView>
       </SafeAreaView>
+
+      {/* 🔥 Logout Confirmation Modal */}
+      <Modal
+        transparent
+        animationType="fade"
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalBox}>
+            <Text style={styles.modalTitle}>Logout</Text>
+
+            <Text style={styles.modalMessage}>
+              Are you sure you want to logout?
+            </Text>
+
+            <View style={styles.modalButtonsContainer}>
+              
+              <TouchableOpacity
+                style={[styles.modalButton, { backgroundColor: COLORS.grayBG }]}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.modalButtonText}>Cancel</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.modalButton, { backgroundColor: '#ff4e76' }]}
+                onPress={handleLogout}
+              >
+                <Text style={[styles.modalButtonText, { color: '#fff' }]}>
+                  Logout
+                </Text>
+              </TouchableOpacity>
+
+            </View>
+          </View>
+        </View>
+      </Modal>
     </>
   );
 }
@@ -100,11 +167,7 @@ function InfoRow({ label, value, isLastRow }) {
     <View
       style={[
         styles.row,
-        isLastRow && {
-          borderBottomWidth: 0,
-          borderBottomColor: 'transparent',
-          paddingBottom: 0,
-        },
+        isLastRow && { borderBottomWidth: 0, paddingBottom: 0 }
       ]}
     >
       <Text style={styles.rowLabel}>{label}</Text>
@@ -113,6 +176,9 @@ function InfoRow({ label, value, isLastRow }) {
   );
 }
 
+// ----------------------
+// Styles
+// ----------------------
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
@@ -124,7 +190,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 12,
     backgroundColor: COLORS.whiteBackground,
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.5,
     borderBottomColor: '#e0e0e0',
     elevation: 1,
   },
@@ -183,7 +249,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginVertical: 5,
     paddingBottom: 10,
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.5,
     borderBottomColor: COLORS.grayBG,
   },
   rowLabel: {
@@ -218,4 +284,46 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '600',
   },
+   modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.45)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalBox: {
+    width: '80%',
+    backgroundColor: '#fff',
+    padding: 25,
+    borderRadius: 14,
+    elevation: 8,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontFamily: 'Quicksand-Bold',
+    color: COLORS.textDark,
+    marginBottom: 10,
+  },
+  modalMessage: {
+    fontSize: 15,
+    fontFamily: 'InterTight-Medium',
+    color: COLORS.textDark,
+    marginBottom: 20,
+  },
+  modalButtonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: 12,
+    marginHorizontal: 5,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalButtonText: {
+    fontSize: 16,
+    fontFamily: 'Quicksand-Bold',
+    color: COLORS.textDark,
+  },
 });
+
