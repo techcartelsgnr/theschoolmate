@@ -1,46 +1,54 @@
+import { Platform, PermissionsAndroid } from 'react-native';
 import { getApp } from '@react-native-firebase/app';
-import { getMessaging, requestPermission, getToken, AuthorizationStatus } from '@react-native-firebase/messaging';
-import { PermissionsAndroid, Platform } from 'react-native';
+import {
+  getMessaging,
+  requestPermission,
+  getToken,
+  AuthorizationStatus,
+  subscribeToTopic,   // ✅ modular subscribe
+} from '@react-native-firebase/messaging';
+import { store } from "../redux/store";
+import { setFcmToken } from "../redux/slices/authSlice";
 export const requestNotificationPermission = async () => {
-  const app = getApp(); // ✅ Use modular API
-  const messaging = getMessaging(app);
+  try {
+    const app = getApp();
+    const messagingInstance = getMessaging(app);
 
-  if (Platform.OS === 'android' && Platform.Version >= 33) {
-    const result = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
-    );
-    if (result !== PermissionsAndroid.RESULTS.GRANTED) {
-      console.log('Notification permission not granted');
+    // ANDROID 13+ PERMISSION
+    if (Platform.OS === 'android' && Platform.Version >= 33) {
+      const result = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
+      );
+      if (result !== PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('🚫 Notification permission denied');
+        return;
+      }
+    }
+
+    // OS Permission
+    const status = await requestPermission(messagingInstance);
+    const enabled =
+      status === AuthorizationStatus.AUTHORIZED ||
+      status === AuthorizationStatus.PROVISIONAL;
+
+    if (!enabled) {
+      console.log('🚫 User denied permission');
       return;
     }
-  }
 
-  try {
-    const authStatus = await requestPermission(messaging);
-    const enabled =
-      authStatus === AuthorizationStatus.AUTHORIZED ||
-      authStatus === AuthorizationStatus.PROVISIONAL;
+    console.log('🔐 Permission Granted');
 
-    if (enabled) {
-      console.log('🔐 Notification permission granted');
-      await fetchFCMToken();
-    } else {
-      console.log('🔒 Notification permission denied');
-    }
+    // GET FCM TOKEN
+    const token = await getToken(messagingInstance);
+    store.dispatch(setFcmToken(token));
+    console.log('🎯 FCM Token:', token);
+
+    // SUBSCRIBE TO TOPIC (MODULAR API)
+    await subscribeToTopic(messagingInstance, 'all');
+    console.log('📌 Subscribed to topic: all');
+
+    return token;
   } catch (err) {
-    console.error('❌ Error requesting FCM permission:', err);
-  }
-};
-
-export const fetchFCMToken = async () => {
-  try {
-    const app = getApp(); // ✅ Use modular API
-    const messaging = getMessaging(app);
-    const token = await getToken(messaging);
-    console.log('✅ FCM Token Genrated Successfully:', token);
-    return token
-    // Optionally send token to your backend
-  } catch (error) {
-    console.error('❌ Failed to get FCM Token:', error);
+    console.log('❌ Permission Error:', err);
   }
 };

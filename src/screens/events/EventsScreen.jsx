@@ -73,14 +73,14 @@ const EventsScreen = () => { // ✨ RENAMED COMPONENT
             style={styles.eventCard}
             onPress={() => navigation.navigate("EventsDetailScreen", { eventId: item.slug })}
         >
-            <View style={styles.eventContent}> 
-                    {item.image ? (
-                        <Image source={{ uri: item.image }} style={styles.eventImage} />
-                    ) : (
-                        <View style={styles.placeholderImage}>
-                            <Text style={{ color: COLORS.textDark }}>No Image</Text>
-                        </View>
-                    )}
+            <View style={styles.eventContent}>
+                {item.image ? (
+                    <Image source={{ uri: item.image }} style={styles.eventImage} />
+                ) : (
+                    <View style={styles.placeholderImage}>
+                        <Text style={{ color: COLORS.textDark }}>No Image</Text>
+                    </View>
+                )}
                 <Text style={styles.eventDate}>{formatDate(item.created_at)}</Text>
                 <Text style={styles.eventTitle}>{item.title}</Text>
                 <View>
@@ -126,12 +126,12 @@ const EventsScreen = () => { // ✨ RENAMED COMPONENT
             {loading ? (
                 <ActivityIndicator size="large" color={COLORS.primary} style={{ marginTop: 40 }} />
             ) : events.length === 0 ? (
-                <Text style={{ textAlign: "center", marginTop: 40, color: COLORS.textDark }}>
+                <Text style={{ textAlign: "center", marginTop: 40, color: COLORS.textDark, fontFamily: 'InterTight-Medium' }}>
                     No Events Found
                 </Text>
             ) : (
                 <FlatList
-                    data={events} 
+                    data={events}
                     renderItem={renderEvent} // USE RENAMED RENDER FUNCTION
                     keyExtractor={(item, index) =>
                         (item.id ? item.id.toString() : index.toString())

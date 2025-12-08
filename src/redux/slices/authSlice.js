@@ -29,6 +29,7 @@ const initialState = {
   isLogout: false,
   firstTime: true,
   helpline_number: '',
+  fcmToken: null,
 };
 
 export const chkLogin = createAsyncThunk('auth/chkLogin', async thunkAPI => {
@@ -49,10 +50,10 @@ export const chkLogin = createAsyncThunk('auth/chkLogin', async thunkAPI => {
 
 export const fetchLogin = createAsyncThunk(
   'auth/login',
-  async ({ uid, date_of_birth }, thunkAPI) => {
+  async ({ uid, date_of_birth,fcmToken }, thunkAPI) => {
     try {
-      console.log('i am here at 46 in slice', uid, date_of_birth);
-      const res = await authService.login({ uid, date_of_birth });
+      console.log('i am here at 46 in slice', uid, date_of_birth,fcmToken);
+      const res = await authService.login({ uid, date_of_birth,fcmToken });
       return res;
     } catch (e) {
       const message =
@@ -216,7 +217,13 @@ export const suggestions = createAsyncThunk(
 export const authSlice = createSlice({
   name: 'auth',
   initialState: initialState,
-  reducers: {},
+  reducers: {
+     // ⭐ NEW: SET FCM TOKEN
+    setFcmToken: (state, action) => {
+      console.log("🔥 Saved FCM token to Redux:", action.payload);
+      state.fcmToken = action.payload;
+    },
+  },
   extraReducers: builder => {
     ////////////////////////////===========Login==========/////////////////////////////
     builder.addCase(fetchLogin.pending, (state, action) => {
@@ -466,5 +473,5 @@ export const authSlice = createSlice({
     //  add all states here
   },
 });
-
+export const { setFcmToken } = authSlice.actions;  // ⭐ EXPORT REDUCER
 export default authSlice.reducer;

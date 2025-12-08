@@ -47,7 +47,7 @@ const SchoolInfoScreen = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <StatusBar backgroundColor={COLORS.cardBackground} barStyle="light-content" />
+            <StatusBar backgroundColor={COLORS.whiteBackground} barStyle="dark-content" />
 
             {/* HEADER */}
             <View style={styles.header}>
@@ -70,14 +70,23 @@ const SchoolInfoScreen = ({ navigation }) => {
                     />
                 }
             >
+                 <View style={styles.schoolContainer}>
+                    <Image
+                        source={{ uri: schoolInfo.schoolimage }}
+                        style={styles.schoolImage}
+                    />
+                </View>
                 {/* LOGO SECTION */}
                 <View style={styles.logoContainer}>
                     <Image
                         source={{ uri: schoolInfo.logo }}
                         style={styles.schoolLogo}
                     />
-                    <Text style={styles.schoolName}>The SchoolMate</Text>
+                    <Text style={styles.schoolName}>{schoolInfo.schoolnamehindi}</Text>
                 </View>
+
+
+                
 
                 {/* INFO CARD */}
                 <View style={styles.infoCard}>
@@ -91,7 +100,6 @@ const SchoolInfoScreen = ({ navigation }) => {
                     </View>
 
                     <View style={styles.divider} />
-
                     {/* Mobile 1 */}
                     <View style={styles.infoRow}>
                         <Ionicons name="call-outline" size={20} color={COLORS.cardBackground} />
@@ -142,7 +150,7 @@ const SchoolInfoScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: COLORS.whiteBackground },
+    container: { flex: 1, backgroundColor: COLORS.whiteBackground, paddingBottom: 20, },
 
     loaderContainer: {
         flex: 1,
@@ -170,13 +178,21 @@ const styles = StyleSheet.create({
     /** LOGO **/
     logoContainer: {
         alignItems: "center",
-        marginTop: 20,
+        marginTop: 10,
         marginBottom: 15,
     },
     schoolLogo: {
         width: 110,
         height: 110,
-        
+    },
+    schoolContainer: {
+        alignItems: "center",
+        marginTop: 0,
+        marginBottom: 0,
+    },
+    schoolImage: {
+        width: '100%',
+        height: 200,
     },
     schoolName: {
         fontSize: 20,
@@ -189,7 +205,7 @@ const styles = StyleSheet.create({
     infoCard: {
         backgroundColor: "#fff",
         marginHorizontal: 20,
-        borderRadius: 14,
+        borderRadius: 10,
         padding: 15,
         borderWidth: 1,
         borderColor: '#eeeeee',
@@ -216,6 +232,8 @@ const styles = StyleSheet.create({
         fontFamily: "Quicksand-Bold",
         color: COLORS.textDark,
         marginTop: 0,
+        // borderWidth:1,
+        // borderColor: COLORS.background,
     },
 
     divider: {

@@ -10,11 +10,12 @@ const authAxios = axios.create({
   },
 });
 
-const login = async ({ uid, date_of_birth }) => {
-  console.log('auth slice line number 14', uid, date_of_birth);
+const login = async ({ uid, date_of_birth,fcmToken }) => {
+  console.log('auth service line number 14', uid, date_of_birth,fcmToken);
   const response = await authAxios.post(`/student/login`, {
     uid: uid,
     date_of_birth: date_of_birth,
+    fcm_token:fcmToken,
     // uid: "1234",
     // date_of_birth: "25-11-2001",
   });

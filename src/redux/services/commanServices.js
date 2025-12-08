@@ -87,8 +87,9 @@ const getSchoolGallery = async (token) => {
         id: item.id,
         img: item.image_url,
       }));
-
+console.log("gallery line number 92", images);
     return { images };
+    
 
   } catch (error) {
     console.log("Gallery API Error:", error);
@@ -280,6 +281,9 @@ const getSchoolInfo = async (token) => {
       email: info.email ?? "",
       address: info.address ?? "",
       logo: info.image_url ?? null, // final full image URL
+      schoolimage: info.school_image_url ?? null,
+      schoolnamehindi: info.school_name_hindi ?? "",
+      schoolnameeng: info.school_name_english ?? "",
       created_at: info.created_at ?? "",
       updated_at: info.updated_at ?? "",
     };
@@ -322,8 +326,104 @@ const getAttendanceSummary = async (token) => {
   }
 };
 
+// ================================
+// 📌 Get Marks Summary API
+// ================================
+// const getMarksSummary = async (token) => {
+//   try {
+//     const res = await authAxios.get("/marks-summery", {
+//       headers: {
+//         Accept: "application/json",
+//         Authorization: "Bearer " + token,
+//       },
+//     });
+
+//     const data = res.data || {};
+
+//     // Safe formatted structure
+//     const marksSummary = {
+//       exams: Array.isArray(data.exams) ? data.exams : [],
+//       exam: data.exam ?? null,
+//       overall: data.overall ?? null,
+//       subjects: Array.isArray(data.subjects) ? data.subjects : [],
+//     };
+
+//     return { marksSummary };
+
+//   } catch (error) {
+//     console.log("Marks Summary API Error:", error);
+//     return { marksSummary: null };
+//   }
+// };
 
 
+
+
+const getMarksSummary = async (token, exam_id = null) => {
+  try {
+    const url = exam_id
+      ? `/marks-summery?exam_master_id=${exam_id}`
+      : `/marks-summery`;
+
+    const res = await authAxios.get(url, {
+      headers: {
+        Accept: "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
+
+    const data = res.data || {};
+
+    return {
+      marksSummary: {
+        exams: Array.isArray(data.exams) ? data.exams : [],
+        exam: data.exam || null,        // selected exam details
+        overall: data.overall || null,  // same as exam summary but included
+        subjects: Array.isArray(data.subjects) ? data.subjects : [],
+      },
+    };
+
+  } catch (error) {
+    console.log("Marks Summary API Error:", error);
+    return { marksSummary: null };
+  }
+};
+
+
+// ================================
+// 📌 Get Today's Notifications
+// ================================
+const getNotifications = async (token) => {
+  try {
+    const res = await authAxios.get("/student/notifications/today", {
+      headers: {
+        Accept: "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
+
+    const data = res.data || {};
+
+    return {
+      count: data.count || 0,
+      notifications: (data.notifications || []).map(item => ({
+        id: item.id,
+        title: item.title,
+        message: item.message,
+        image: item.attachment_url
+          ? "https://theschoolmate.in" + item.attachment_url
+          : null,
+        time: item.created_at,
+        isNew: item.is_new,              // ⭐ changed from isRead → isNew
+        delivery: item.delivery_status,
+      })),
+    };
+
+  } catch (error) {
+    console.log("Notifications API Error:", error);
+    return { count: 0, notifications: [] };
+  }
+};
 
 
 const showToast = Message => {
@@ -346,5 +446,7 @@ const commanServices = {
   getEventDetail,
   getSchoolInfo,
   getAttendanceSummary,
+  getMarksSummary,
+  getNotifications
 };
 export default commanServices;

@@ -1,6 +1,5 @@
-import {Alert, Platform} from 'react-native';
-import {getApp} from '@react-native-firebase/app';
-import notifee, {EventType} from '@notifee/react-native';
+// notificationService.js
+import { getApp } from '@react-native-firebase/app';
 import {
   getMessaging,
   onMessage,
@@ -8,113 +7,161 @@ import {
   getInitialNotification,
 } from '@react-native-firebase/messaging';
 
-import {navigate} from '../contants/NavigationService';
-import {notificationOpenedRef} from './AppState';
+import notifee, { EventType } from '@notifee/react-native';
+import { navigate } from '../contants/NavigationService';
 
-// 🔔 Register all notification listeners
-export const registerNotificationListeners = () => {
-  const app = getApp();
-  const messaging = getMessaging(app);
+// -------------------------------------------------------------
+// 🔥 Screen Router — handles all navigation based on notification
+// -------------------------------------------------------------
 
-  // 1️⃣ Foreground notification received
-  onMessage(messaging, async remoteMessage => {
-    console.log('📩 Foreground FCM Message:', remoteMessage);
-    await displayNotification(remoteMessage); // Show local notification
-    
-  });
+const navigateByNotificationType = (data) => {
+  if (!data) return;
 
-  // 2️⃣ Foreground tap on local notification
-  notifee.onForegroundEvent(({type, detail}) => {
-    if (type === EventType.PRESS && detail.pressAction?.id === 'tap-action') {
-      const data = detail.notification?.data;
-      console.log('👉 User tapped foreground notification:', data);
+  const type = data?.content_type?.toLowerCase();   // blog , event , general
+  console.log("📲 Notification Type line number 21:", type);
 
-      if (data?.screen) {
-        handleNavigation({data}); // Wrap in mock remoteMessage
-      }
-    }
-  });
-
-  // 3️⃣ Background: Notification opened from background
-  onNotificationOpenedApp(messaging, remoteMessage => {
-    console.log(
-      '📩 Opened app from background via notification:',
-      remoteMessage,
-    );
-    Alert.alert(remoteMessage);
-    handleNavigation(remoteMessage);
-  });
-
-  // 4️⃣ Cold Start: App opened from killed state
-  getInitialNotification(messaging).then(remoteMessage => {
-    if (remoteMessage && !notificationOpenedRef.handledInitialNotification) {
-      console.log(
-        '📩 App opened from killed state via notification:',
-        remoteMessage,
-      );
-
-      handleNavigation(remoteMessage);
-
-      const {data} = remoteMessage;
-      notificationOpenedRef.openedFromNotification = true;
-      notificationOpenedRef.targetScreen = data?.screen || '';
-      notificationOpenedRef.targetParams = {...data};
-      notificationOpenedRef.handledInitialNotification = true;
-    }
-  });
-};
-
-// 🔔 Display notification manually (used in foreground)
-const displayNotification = async remoteMessage => {
-  const channelId = await notifee.createChannel({
-    id: 'default',
-    name: 'Default Channel',
-  });
-
-  await notifee.displayNotification({
-    title: remoteMessage.notification?.title || 'New Notification',
-    body: remoteMessage.notification?.body || '',
-    android: {
-      channelId,
-      smallIcon: 'ic_launcher', // 🟢 Make sure this exists
-      pressAction: {
-        id: 'tap-action', // Used for foreground tap handling
-      },
-    },
-    data: remoteMessage.data || {}, // Pass full payload
-  });
-};
-
-// 🔀 Central navigation handler
-const handleNavigation = remoteMessage => {
-  const data = remoteMessage?.data || {};
-  const screen = data.screen;
-
-  console.log('🔀 Navigating based on data:', screen);
-
-  switch (screen) {
-    case "Notifications":
-      navigate('Notifications');
+  switch (type) {
+    case "blog":
+      navigate("BlogScreen", data);         // Navigate to blog detail
       break;
 
-    // case "NotificationsScreen":
-    //      navigate('laboratoryScreen', {
-    //     screen: 'NotificationsScreen'
-    //   });
-    //   break;
-     
-    // case 'news':
-    // case 'HomeScreen':
-    //   navigate('NewsDetails', {id: data.id});
-    //   break;
-
-    // case 'OrderDetails':
-    // case 'order':
-    //   navigate('OrderDetails', {orderId: data.order_id});
-    //   break;
+    case "event":
+      navigate("EventsScreen", data);       // Navigate to event
+      break;
 
     default:
-      navigate('Notifications');
+      navigate("NotificationScreen", data); // Normal notification screen
       break;
   }
 };
+
+// -------------------------------------------------------------
+// 🔔 Foreground Handler
+// -------------------------------------------------------------
+
+export const registerNotificationListeners = () => {
+  const app = getApp();
+  const messagingInstance = getMessaging(app);
+
+  // When app is open → show local notification
+  onMessage(messagingInstance, async (remoteMessage) => {
+    console.log("📩 Foreground Message:", remoteMessage);
+
+    const channelId = await notifee.createChannel({
+      id: "default",
+      name: "Default Channel",
+    });
+
+    await notifee.displayNotification({
+      title: remoteMessage.notification?.title,
+      body: remoteMessage.notification?.body,
+      android: {
+        channelId,
+        smallIcon: "ic_launcher",
+        pressAction: { id: "tap-action" },
+      },
+      data: remoteMessage.data || {},
+    });
+  });
+
+  // -------------------------------------------------------------
+  // 🔥 When user taps notification (app in foreground)
+  // -------------------------------------------------------------
+  notifee.onForegroundEvent(({ type, detail }) => {
+    if (type === EventType.PRESS) {
+      const data = detail?.notification?.data;
+      navigateByNotificationType(data);
+    }
+  });
+
+  // -------------------------------------------------------------
+  // 🔥 When app opened from background tap
+  // -------------------------------------------------------------
+  onNotificationOpenedApp(messagingInstance, (remoteMessage) => {
+    if (remoteMessage) {
+      navigateByNotificationType(remoteMessage.data);
+    }
+  });
+
+  // -------------------------------------------------------------
+  // 🔥 When app opened from KILLED state (cold start)
+  // -------------------------------------------------------------
+  getInitialNotification(messagingInstance).then((remoteMessage) => {
+    if (remoteMessage) {
+      navigateByNotificationType(remoteMessage.data);
+    }
+  });
+};
+
+
+
+
+
+
+
+
+
+
+// import { getApp } from '@react-native-firebase/app';
+// import {
+//   getMessaging,
+//   onMessage,
+//   onNotificationOpenedApp,
+//   getInitialNotification
+// } from '@react-native-firebase/messaging';
+// import notifee, { EventType } from '@notifee/react-native';
+// import { navigate } from '../contants/NavigationService';
+
+// // Simple Foreground Local Notification
+// const showLocalNotification = async remoteMessage => {
+//   const channelId = await notifee.createChannel({
+//     id: 'default',
+//     name: 'Default',
+//   });
+
+//   await notifee.displayNotification({
+//     title: remoteMessage.notification?.title,
+//     body: remoteMessage.notification?.body,
+//     android: {
+//       channelId,
+//       smallIcon: 'ic_launcher',
+//       pressAction: { id: 'tap-action' },
+//     },
+//     data: remoteMessage.data,
+//   });
+// };
+
+// export const registerNotificationListeners = () => {
+//   const app = getApp();
+//   const messagingInstance = getMessaging(app);
+
+//   // 1️⃣ Foreground Receive
+//   onMessage(messagingInstance, async remoteMessage => {
+//     console.log('📩 Foreground:', remoteMessage);
+//     await showLocalNotification(remoteMessage);
+//   });
+
+//   // 2️⃣ Foreground Tap
+//   notifee.onForegroundEvent(({ type, detail }) => {
+//     if (type === EventType.PRESS) {
+//       const screen = detail.notification?.data?.screen;
+//       if (screen) navigate(screen);
+//     }
+//   });
+
+//   // 3️⃣ Background Tap
+//   onNotificationOpenedApp(messagingInstance, remoteMessage => {
+//     const screen = remoteMessage?.data?.screen;
+//     console.log('📩 Opened App From BG:', screen);
+//     if (screen) navigate(screen);
+//   });
+
+//   // 4️⃣ Cold Start
+//   getInitialNotification(messagingInstance).then(remoteMessage => {
+//     if (remoteMessage) {
+//       const screen = remoteMessage?.data?.screen;
+//       console.log('📩 Cold Start:', screen);
+//       if (screen) navigate(screen);
+//     }
+//   });
+// };

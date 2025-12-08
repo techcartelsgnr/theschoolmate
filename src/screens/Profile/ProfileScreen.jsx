@@ -162,7 +162,32 @@ export default function ProfileScreen({ navigation }) {
   );
 }
 
+// function InfoRow({ label, value, isLastRow }) {
+//   return (
+//     <View
+//       style={[
+//         styles.row,
+//         isLastRow && { borderBottomWidth: 0, paddingBottom: 0 }
+//       ]}
+//     >
+//       <Text style={styles.rowLabel}>{label}</Text>
+//       <Text style={styles.rowValue}>{value}</Text>
+//     </View>
+//   );
+// }
+
+
 function InfoRow({ label, value, isLastRow }) {
+  // 🟢 Handle both plain text and React components
+  const renderValue =
+    value === null ||
+    value === undefined ||
+    value === "" ||
+    value === "null" ||
+    value === "undefined"
+      ? "NA"
+      : value;
+
   return (
     <View
       style={[
@@ -171,10 +196,18 @@ function InfoRow({ label, value, isLastRow }) {
       ]}
     >
       <Text style={styles.rowLabel}>{label}</Text>
-      <Text style={styles.rowValue}>{value}</Text>
+
+      {/* If value is a component (like phone link), we render it directly */}
+      {typeof renderValue === "string" ? (
+        <Text style={styles.rowValue}>{renderValue}</Text>
+      ) : (
+        renderValue
+      )}
     </View>
   );
 }
+
+
 
 // ----------------------
 // Styles
@@ -182,6 +215,7 @@ function InfoRow({ label, value, isLastRow }) {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
+    paddingBottom: 60,
   },
   headerAtten: {
     flexDirection: 'row',

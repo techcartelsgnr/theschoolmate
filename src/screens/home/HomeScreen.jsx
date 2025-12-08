@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   StyleSheet,
   View,
@@ -9,30 +9,22 @@ import {
   Image,
   TouchableOpacity,
   BackHandler,
-  ToastAndroid,
   Modal,
-  Animated,
-  RefreshControl
+  RefreshControl,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { COLORS, Spacing } from '../../theme/theme';
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from '../../redux/slices/authSlice';
 import Slider from '../../components/Slider';
-import { BlurView } from "@react-native-community/blur";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { fetchSchoolInfo } from "../../redux/slices/commonSlice";
-import { NotificationScreen } from '../index';
-
-
 
 
 const { width, height } = Dimensions.get('window');
 
 // Home categories
 const categories = [
-  // { title: 'Dashboard', image: require('../../../assets/homeicon/dashboard.png'), screen: 'DashboardScreen' },
   { title: 'Attendance', image: require('../../../assets/homeicon/attendancescreen.png'), screen: 'AttendanceScreen' },
   { title: 'Fee Details', image: require('../../../assets/homeicon/feescreen.png'), screen: 'FeesScreen' },
   { title: 'Examination', image: require('../../../assets/homeicon/examination.png'), screen: 'MarksScreen' },
@@ -67,6 +59,8 @@ export default function HomeScreen() {
   const [exitModal, setExitModal] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
+  const unread = useSelector(state => state.common.unreadCount);
+
   useEffect(() => {
     if (token) {
       dispatch(fetchSchoolInfo(token));
@@ -79,14 +73,17 @@ export default function HomeScreen() {
       setExitModal(true);
       return true; // block default back
     };
-
     const backHandler = BackHandler.addEventListener(
       "hardwareBackPress",
       backAction
     );
-
     return () => backHandler.remove();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+    }, [unread])
+  );
 
   const exitApp = () => {
     setExitModal(false);
@@ -106,8 +103,6 @@ export default function HomeScreen() {
     }, 800);
   };
 
-
-
   return (
     <>
       <StatusBar backgroundColor={COLORS.whiteBackground} barStyle="dark-content" />
@@ -122,8 +117,28 @@ export default function HomeScreen() {
               <Text style={styles.headerRightClass}>{studentclass} - {section}</Text>
             </View>
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate(NotificationScreen)}>
-            <Ionicons name="notifications" size={24} color={COLORS.whiteBackground} />
+          <TouchableOpacity onPress={() => navigation.navigate("NotificationScreen")}>
+            <View style={{ position: "relative" }}>
+              <Ionicons name="notifications" size={28} color="#fff" />
+
+              {unread > 0 && (
+                <View
+                  style={{
+                    position: "absolute",
+                    right: -4,
+                    top: -3,
+                    backgroundColor: "red",
+                    paddingHorizontal: 5,
+                    paddingVertical: 1,
+                    borderRadius: 10,
+                  }}
+                >
+                  <Text style={{ color: "white", fontSize: 10, fontWeight: "bold" }}>
+                    {unread}
+                  </Text>
+                </View>
+              )}
+            </View>
           </TouchableOpacity>
         </View>
 
@@ -142,10 +157,10 @@ export default function HomeScreen() {
 
 
           {/* Attendance Box */}
-          <View style={styles.homeAttenBox}>
+          {/* <View style={styles.homeAttenBox}>
             <Text style={styles.homeAttenTitle}>Attendance SnapShot</Text>
             <Text style={styles.homeAttenPerc}>90%</Text>
-          </View>
+          </View> */}
 
           {/* Category Grid */}
           <View style={styles.fullView}>
@@ -205,7 +220,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     backgroundColor: COLORS.cardBackground,
   },
-  homeLeftHeader:{
+  homeLeftHeader: {
     flexDirection: 'row',
     alignItems: 'center',
   },

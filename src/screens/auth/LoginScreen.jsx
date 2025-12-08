@@ -9,12 +9,16 @@ import {
   ToastAndroid,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchLogin } from "../../redux/slices/authSlice";
 
 import InputAuthField from '../../components/InputAuthField';
 import ButtonWithLoader from '../../components/ButtonWithLoader';
 import { COLORS } from '../../theme/theme';
+
+
+
+
 
 export default function LoginScreen() {
   const navigation = useNavigation();
@@ -23,6 +27,8 @@ export default function LoginScreen() {
   const [uid, setUid] = useState('');
   const [dob, setDob] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const fcmToken = useSelector(state => state.auth.fcmToken);
 
   // -------------------------
   // FORMAT DOB - DD/MM/YYYY
@@ -61,7 +67,7 @@ export default function LoginScreen() {
 
     setLoading(true);
 
-    dispatch(fetchLogin({ uid: uid, date_of_birth: finalDOB }))
+    dispatch(fetchLogin({ uid: uid, date_of_birth: finalDOB, fcmToken:fcmToken }))
       .unwrap()
       .then(() => {
         // Login success
@@ -90,7 +96,7 @@ export default function LoginScreen() {
             style={styles.logo}
             resizeMode="contain"
           />
-          <Text style={styles.appTitle}>Welcome to SchoolMate</Text>
+          {/* <Text style={styles.appTitle}>Welcome to SchoolMate</Text> */}
           <Text style={styles.appSubtitle}>Login to continue</Text>
         </View>
 
@@ -147,7 +153,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#1E3A8A',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 40,
+    paddingTop: 0,
   },
 
   logo: {
@@ -159,14 +165,14 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: '#fff',
     fontFamily: 'Quicksand-Bold',
-    marginTop: 10,
+    marginTop: 0,
   },
 
   appSubtitle: {
     fontSize: 14,
     color: '#cbd5e1',
     fontFamily: 'Quicksand-Medium',
-    marginTop: 4,
+    marginTop: 0,
   },
 
   bottomSection: {

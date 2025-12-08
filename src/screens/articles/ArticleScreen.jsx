@@ -131,8 +131,8 @@ const ArticleScreen = () => {
             {loading ? (
                 <ActivityIndicator size="large" color={COLORS.primary} style={{ marginTop: 40 }} />
             ) : articles.length === 0 ? (
-                <Text style={{ textAlign: "center", marginTop: 40, color: COLORS.textDark }}>
-                    No Blogs Found
+                <Text style={{ textAlign: "center", marginTop: 40, color: COLORS.textDark, fontFamily: 'InterTight-Medium' }}>
+                    No Articles Found
                 </Text>
             ) : (
                 <FlatList

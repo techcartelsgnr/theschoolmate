@@ -1,68 +1,73 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   TouchableOpacity,
-  StatusBar,
+  FlatList,
   RefreshControl,
+  StatusBar,
+  Image,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS } from "../../theme/theme";
 
-const NotificationScreen = ({ navigation }) => {
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchNotifications,
+  clearUnreadCount,
+} from "../../redux/slices/commonSlice";
+
+export default function NotificationScreen({ navigation }) {
+  const dispatch = useDispatch();
+
+  const token = useSelector((state) => state.auth.token);
+  const notifications = useSelector((state) => state.common.notifications);
+  const loading = useSelector((state) => state.common.notificationsLoading);
 
   const [refreshing, setRefreshing] = useState(false);
 
-  // 🔔 Sample Notifications (replace with API later)
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      title: "School Holiday",
-      message: "School will remain closed tomorrow due to heavy rainfall.",
-      time: "2 hrs ago",
-      isRead: false,
-    },
-    {
-      id: 2,
-      title: "Exam Schedule",
-      message: "Term-1 examination schedule has been updated.",
-      time: "Yesterday",
-      isRead: true,
-    },
-    {
-      id: 3,
-      title: "Fee Reminder",
-      message: "Please pay the monthly fee before 10th March.",
-      time: "2 days ago",
-      isRead: false,
-    },
-  ]);
+  // 🔥 Auto-load when screen opens
+  useEffect(() => {
+    if (token) {
+      dispatch(fetchNotifications(token));
+      dispatch(clearUnreadCount()); // clear badge
+    }
+  }, []);
 
+  // 🔄 Pull To Refresh
   const onRefresh = () => {
     setRefreshing(true);
-
-    setTimeout(() => {
-      // here you can call API → fetchNotifications()
-      setRefreshing(false);
-    }, 600);
+    dispatch(fetchNotifications(token)).finally(() => setRefreshing(false));
   };
 
+  // 🔔 Render Each Notification
   const renderItem = ({ item }) => (
-    <TouchableOpacity style={[styles.card, !item.isRead && styles.unreadCard]}>
+    <TouchableOpacity
+      style={[styles.card, item.isNew && styles.unreadCard]}
+      activeOpacity={0.8}
+    >
+      {/* Icon */}
       <View style={styles.notificationIcon}>
         <Ionicons
-          name={item.isRead ? "notifications-outline" : "notifications"}
+          name={item.isNew ? "notifications" : "notifications-outline"}
           size={22}
-          color={COLORS.cardBackground}
+          color={COLORS.whiteBackground}
         />
       </View>
 
+      {/* Main Content */}
       <View style={styles.textContainer}>
         <Text style={styles.title}>{item.title}</Text>
+
         <Text style={styles.message}>{item.message}</Text>
+
+        {/* Attachment Image */}
+        {item.image && (
+          <Image source={{ uri: item.image }} style={styles.attachmentImage} />
+        )}
+
         <Text style={styles.time}>{item.time}</Text>
       </View>
     </TouchableOpacity>
@@ -70,41 +75,60 @@ const NotificationScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor={COLORS.whiteBackground} barStyle="dark-content" />
+      <StatusBar
+        backgroundColor={COLORS.whiteBackground}
+        barStyle="dark-content"
+      />
 
       {/* HEADER */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={26} color={COLORS.textDark} />
         </TouchableOpacity>
+
         <Text style={styles.headerTitle}>Notifications</Text>
+
         <View style={{ width: 26 }} />
       </View>
 
-      {/* LIST */}
+      {/* NOTIFICATION LIST */}
       <FlatList
         data={notifications}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[COLORS.cardBackground]} />
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={[COLORS.cardBackground]}
+          />
         }
         ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Ionicons name="notifications-off-outline" size={60} color="#ccc" />
-            <Text style={styles.emptyText}>No Notifications Found</Text>
-          </View>
+          !loading && (
+            <View style={styles.emptyContainer}>
+              <Ionicons
+                name="notifications-off-outline"
+                size={60}
+                color="#ccc"
+              />
+              <Text style={styles.emptyText}>No Notifications Found</Text>
+            </View>
+          )
         }
         contentContainerStyle={{
           paddingHorizontal: 15,
           paddingBottom: 20,
+          paddingTop: 10,
         }}
       />
     </SafeAreaView>
   );
-};
+}
 
+/* ---------------------------------------------------------
+   STYLES
+--------------------------------------------------------- */
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -138,17 +162,18 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowOffset: { width: 0, height: 1 },
   },
+
   unreadCard: {
     backgroundColor: "#eef6ff",
     borderLeftWidth: 4,
-    borderLeftColor: COLORS.cardBackground,
+    borderLeftColor: COLORS.secondaryGradientStart,
   },
 
   notificationIcon: {
     width: 38,
     height: 38,
     borderRadius: 20,
-    backgroundColor: COLORS.grayBackground,
+    backgroundColor: COLORS.secondaryGradientStart,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -171,14 +196,22 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
 
+  attachmentImage: {
+    width: "100%",
+    height: 160,
+    borderRadius: 10,
+    marginTop: 10,
+    backgroundColor: "#ddd",
+  },
+
   time: {
-    marginTop: 4,
+    marginTop: 6,
     fontSize: 11,
-    color: "#888",
+    color: "#777",
     fontFamily: "InterTight-Medium",
   },
 
-  /** EMPTY BOX **/
+  /** EMPTY LIST **/
   emptyContainer: {
     justifyContent: "center",
     alignItems: "center",
@@ -191,5 +224,3 @@ const styles = StyleSheet.create({
     fontFamily: "Quicksand-Bold",
   },
 });
-
-export default NotificationScreen;
