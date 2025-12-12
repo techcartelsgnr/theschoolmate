@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { COLORS, Spacing } from '../../theme/theme';
+import { COLORS, FontSizes } from '../../theme/theme';
 import { useSelector, useDispatch } from "react-redux";
 import Slider from '../../components/Slider';
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -25,17 +25,18 @@ const { width, height } = Dimensions.get('window');
 
 // Home categories
 const categories = [
-  { title: 'Attendance', image: require('../../../assets/homeicon/attendancescreen.png'), screen: 'AttendanceScreen' },
+  { title: 'Activities', image: require('../../../assets/homeicon/attendancescreen.png'), screen: 'ActivitiesScreen' },
   { title: 'Fee Details', image: require('../../../assets/homeicon/feescreen.png'), screen: 'FeesScreen' },
-  { title: 'Examination', image: require('../../../assets/homeicon/examination.png'), screen: 'MarksScreen' },
-  { title: 'Report Cards', image: require('../../../assets/homeicon/report.png'), screen: 'ReportCardScreen' },
-  { title: 'Profile', image: require('../../../assets/homeicon/profilescreen.png'), screen: 'ProfileScreen' },
+
+  // { title: 'Report Cards', image: require('../../../assets/homeicon/report.png'), screen: 'ReportCardScreen' },
+  // { title: 'Profile', image: require('../../../assets/homeicon/profilescreen.png'), screen: 'ProfileScreen' },
   { title: 'Notice Board', image: require('../../../assets/homeicon/notice.png'), screen: 'NoticeBoardScreen' },
   { title: 'Gallery', image: require('../../../assets/homeicon/gallery.png'), screen: 'GalleryScreen' },
   { title: 'Blog', image: require('../../../assets/homeicon/blog.png'), screen: 'BlogScreen' },
   { title: 'Article', image: require('../../../assets/homeicon/article.png'), screen: 'ArticleScreen' },
   { title: 'Events', image: require('../../../assets/homeicon/event.png'), screen: 'EventsScreen' },
   { title: 'School Info', image: require('../../../assets/homeicon/information.png'), screen: 'SchoolInfoScreen' },
+  // { title: 'Feedback History', image: require('../../../assets/homeicon/examination.png'), screen: 'FeedbackHistoryScreen' },
 ];
 
 const CATEGORY_COLORS = [
@@ -111,6 +112,10 @@ export default function HomeScreen() {
         {/* Header */}
         <View style={styles.homeHeader}>
           <View style={styles.homeLeftHeader}>
+            <TouchableOpacity onPress={() => navigation.openDrawer()}>
+              {/* <Ionicons name="menu" size={32} color="#fff" style={{ marginRight: 12 }} /> */}
+              <Image style={styles.menuImage} source={require('../../../assets/homeicon/menu.png')} />
+            </TouchableOpacity>
             <Image source={{ uri: image }} style={styles.homelogo} resizeMode="contain" />
             <View style={styles.homeHeaderRight}>
               <Text style={styles.headerRightTitle}>Welcome, {name}</Text>
@@ -207,8 +212,15 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, paddingBottom: 50 },
-  container: { flexGrow: 1, backgroundColor: COLORS.whiteBackground, padding: 10 },
+  safeArea: {
+    flex: 1,
+    paddingBottom: 50
+  },
+  container: {
+    flexGrow: 1,
+    backgroundColor: COLORS.whiteBackground,
+    padding: 10
+  },
 
   // HEADER
   homeHeader: {
@@ -224,22 +236,67 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  homelogo: { width: 45, height: 45, borderRadius: 100 },
-  homeHeaderRight: { marginLeft: 10 },
-  headerRightTitle: {
-    fontSize: Spacing.medium, color: COLORS.textPrimary, fontFamily: 'InterTight-Bold'
+  menuImage:{
+    width: 35,
+    height: 35,
+    marginRight: 10,
   },
-  headerRightClass: { fontSize: Spacing.medium, color: COLORS.textPrimary, fontFamily: 'Quicksand-Bold' },
+  homelogo: {
+    width: 40,
+    height: 40,
+    borderRadius: 100,
+    elevation: 1,
+  },
+  homeHeaderRight: {
+    marginLeft: 10
+  },
+  headerRightTitle: {
+    fontSize: FontSizes.small,
+    color: COLORS.textPrimary,
+    fontFamily: 'Quicksand-Bold'
+  },
+  headerRightClass: {
+    fontSize: FontSizes.small,
+    color: COLORS.textPrimary,
+    fontFamily: 'Quicksand-Bold'
+  },
 
-  homeAttenBox: { padding: 10, backgroundColor: COLORS.grayBackground, marginBottom: 20 },
-  homeAttenTitle: { fontSize: Spacing.xl, color: COLORS.whiteBackground, fontFamily: 'Quicksand-Bold', textAlign: 'center' },
-  homeAttenPerc: { fontSize: Spacing.xl, color: COLORS.whiteBackground, fontFamily: 'Quicksand-Bold', textAlign: 'center' },
+  homeAttenBox: {
+    padding: 10,
+    backgroundColor: COLORS.grayBackground,
+    marginBottom: 20
+  },
+  homeAttenTitle: {
+    fontSize: FontSizes.xxl,
+    color: COLORS.whiteBackground,
+    fontFamily: 'Quicksand-Bold',
+    textAlign: 'center'
+  },
+  homeAttenPerc: {
+    fontSize: FontSizes.xxl,
+    color: COLORS.whiteBackground,
+    fontFamily: 'Quicksand-Bold',
+    textAlign: 'center'
+  },
 
-  fullView: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-around' },
-  schoolCategory: { alignItems: 'center', marginBottom: 10, width: width * 0.29, borderRadius: 5, paddingVertical: 15 },
-  logo: { width: 42, height: 42 },
+  fullView: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around'
+  },
+  schoolCategory: {
+    alignItems: 'center',
+    marginBottom: 10,
+    width: width * 0.29,
+    borderRadius: 5,
+    paddingVertical: 15
+  },
+  logo: {
+    width: 42,
+    height: 42
+  },
   catTitle: {
-    fontSize: Spacing.forteen,
+    fontSize: FontSizes.xsmall,
     color: COLORS.whiteBackground,
     fontFamily: 'Quicksand-Bold',
     marginTop: 8,
@@ -261,29 +318,45 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   modalTitle: {
-    fontSize: 20,
+    fontSize: FontSizes.normal,
     fontFamily: 'Quicksand-Bold',
     color: COLORS.textDark,
     marginBottom: 10,
   },
   modalMessage: {
-    fontSize: 15,
+    fontSize: FontSizes.normal,
     fontFamily: 'InterTight-Medium',
     color: COLORS.textDark,
     marginBottom: 20,
   },
-  modalButtonsContainer: { flexDirection: 'row', justifyContent: 'space-between' },
-  modalButton: { flex: 1, paddingVertical: 12, marginHorizontal: 5, borderRadius: 10, alignItems: 'center' },
-  cancelButton: { backgroundColor: COLORS.grayBG },
-  exitButton: { backgroundColor: '#ff4e76' },
-  modalButtonText: { fontSize: 16, fontFamily: 'Quicksand-Bold' },
+  modalButtonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: 12,
+    marginHorizontal: 5,
+    borderRadius: 10,
+    alignItems: 'center'
+  },
+  cancelButton: {
+    backgroundColor: COLORS.grayBG
+  },
+  exitButton: {
+    backgroundColor: '#ff4e76'
+  },
+  modalButtonText: {
+    fontSize: FontSizes.normal,
+    fontFamily: 'Quicksand-Bold'
+  },
   marqueeContainer: {
     backgroundColor: '#e1f5fe',
     borderRadius: 8,
     marginBottom: 20,
   },
   marqueeText: {
-    fontSize: 16,
+    fontSize: FontSizes.normal,
     color: '#0277bd',
     fontWeight: '600',
   },

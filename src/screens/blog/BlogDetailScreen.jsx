@@ -14,7 +14,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import RenderHTML from "react-native-render-html";
-import { COLORS } from "../../theme/theme";
+import { COLORS, FontSizes } from "../../theme/theme";
 import { useSelector } from "react-redux";
 import commanServices from "../../redux/services/commanServices";
 
@@ -144,7 +144,7 @@ const BlogDetailScreen = ({ route, navigation }) => {
                         tagsStyles={{
                             p: {
                                 fontFamily: "InterTight-Bold",
-                                fontSize: 14,
+                                fontSize: FontSizes.small,
                                 color: COLORS.gray,
                                 marginTop: 10,
                                 paddingHorizontal: 15,
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
     },
     headerTitle: {
-        fontSize: 18,
+        fontSize: FontSizes.medium,
         fontFamily: "Quicksand-Bold",
         color: COLORS.textDark,
     },
@@ -222,14 +222,14 @@ const styles = StyleSheet.create({
         width: width, height: 230, resizeMode: "cover",
     },
     title: {
-        fontSize: 18,
+        fontSize: FontSizes.medium,
         fontFamily: "Quicksand-Bold",
         marginTop: 12,
         paddingHorizontal: 14,
         color: COLORS.textDark,
     },
     subHeader: {
-        fontSize: 16,
+        fontSize: FontSizes.normal,
         fontFamily: "Quicksand-Bold",
         paddingHorizontal: 15,
         marginBottom: 10,

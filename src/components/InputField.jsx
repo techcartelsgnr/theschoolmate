@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, TextInput } from 'react-native';
-import { COLORS } from '../theme/theme';
+import { COLORS, FontSizes } from '../theme/theme';
 
 const InputField = ({
   label,

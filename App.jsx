@@ -12,7 +12,7 @@ import { requestNotificationPermission } from './src/utils/requestPermissions';
 import { registerNotificationListeners, navigateByNotificationType } from './src/utils/notificationService';
 
 import AuthStack from './src/navigation/AuthStack';
-import MainStack from './src/navigation/MainStack';
+import DrawerNavigator from './src/navigation/DrawerNavigator'
 
 import { chkLogin } from './src/redux/slices/authSlice';
 
@@ -61,7 +61,7 @@ function AppNavigator() {
         processPendingNavigation();         // ⭐ Flush queued navigation calls
       }}
     >
-      {token ? <MainStack /> : <AuthStack />}
+      {token ? <DrawerNavigator /> : <AuthStack />}
     </NavigationContainer>
   );
 }

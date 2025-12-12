@@ -426,6 +426,193 @@ const getNotifications = async (token) => {
 };
 
 
+// ================================
+// 📌 Get Fee Summary API
+// ================================
+const getFeeSummary = async (token) => {
+  try {
+    const res = await authAxios.get("/fees-summary", {
+      headers: {
+        Accept: "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
+
+    const data = res.data || {};
+
+    // Format Outstanding
+    const outstanding = {
+      total_fee: data.outstanding?.total_fee ?? "0",
+      total_paid: data.outstanding?.total_paid ?? "0",
+      total_due: data.outstanding?.total_due ?? 0,
+      is_completed: data.outstanding?.is_completed ?? false,
+    };
+
+    // Format Paid History
+    const paid_history = Array.isArray(data.paid_history)
+      ? data.paid_history.map((item) => ({
+          fee_head: item.fee_head ?? "",
+          amount: item.amount ?? "0",
+          paid_date: item.paid_date ?? "",
+          status: item.status ?? "",
+        }))
+      : [];
+
+    // Previous Pending Fees (if any)
+    const previous_pending = Array.isArray(data.previous_pending)
+      ? data.previous_pending
+      : [];
+
+    return {
+      feeSummary: {
+        outstanding,
+        paid_history,
+        previous_pending,
+      },
+    };
+
+  } catch (error) {
+    console.log("Fee Summary API Error:", error);
+    return { feeSummary: null };
+  }
+};
+
+
+
+
+// ================================
+// 📌 Get Activities List
+// ================================
+const getActivities = async (token) => {
+  try {
+    const res = await authAxios.get("/activity", {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token, // if required
+      },
+    });
+
+    const activityList = res.data.data || [];
+
+    // Format for UI
+    const activities = activityList.map((item, index) => ({
+      id: index + 1,                         // API does not send ID
+      slug: item.slug ?? "",                 // activity slug
+      title: item.title ?? "Untitled Activity",
+      short_desc: item.short_description ?? "",
+      cover_image: item.image_url ?? null,   // safe image
+      created_at: item.created_at ?? "",
+    }));
+
+    return { activities };
+
+  } catch (error) {
+    console.log("Activity API Error:", error);
+    return { activities: [] };
+  }
+};
+
+
+// ================================
+// 📌 Get Activity Detail
+// ================================
+const getActivitiesDetail = async (token, slug) => {
+  try {
+    const res = await authAxios.get(`/activity-detail/${slug}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
+
+    return {
+      activityDetail: res.data.data || null,
+      contentImages: res.data.contentImages || [],
+    };
+
+  } catch (error) {
+    console.log("Activity Detail API Error:", error);
+    return { activityDetail: null, contentImages: [] };
+  }
+};
+
+// ================================
+// 📌 Submit Feedback
+// ================================
+const submitFeedback = async (token, payload) => {
+  try {
+    const res = await authAxios.post(
+      "/feedback-submit",
+      {
+        problem_type: payload.problem_type,
+        feedback_text: payload.feedback_text,
+      },
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+
+    return {
+      success: true,
+      message: res.data.message || "Submitted",
+      feedback: res.data.data || null,
+    };
+
+  } catch (error) {
+    console.log("Feedback Submit API Error:", error);
+
+    return {
+      success: false,
+      message: "Something went wrong",
+      feedback: null,
+    };
+  }
+};
+
+// ================================
+// 📌 Get My Feedback History
+// ================================
+const getFeedbackHistory = async (token) => {
+  try {
+    const res = await authAxios.get("/my-feedbacks", {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
+
+    const list = res.data.data || [];
+
+    // Format clean structure for UI
+    const feedbackHistory = list.map((item) => ({
+      id: item.id,
+      problem_type: item.problem_type ?? "",
+      description: item.feedback_text ?? "",
+      status: item.status === "1" ? "Solved" : "Pending",
+      date: item.created_at ? new Date(item.created_at).toDateString() : "",
+    }));
+
+    return { feedbackHistory };
+
+  } catch (error) {
+    console.log("Feedback History API Error:", error);
+    return { feedbackHistory: [] };
+  }
+};
+
+
+
+
+
+
+
 const showToast = Message => {
   Toast.show({
     type: 'success',
@@ -447,6 +634,11 @@ const commanServices = {
   getSchoolInfo,
   getAttendanceSummary,
   getMarksSummary,
-  getNotifications
+  getNotifications,
+  getFeeSummary,
+  getActivities,
+  getActivitiesDetail,
+  submitFeedback,
+  getFeedbackHistory
 };
 export default commanServices;

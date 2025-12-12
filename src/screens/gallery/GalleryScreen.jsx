@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { COLORS } from '../../theme/theme';
+import { COLORS, FontSizes } from '../../theme/theme';
 import { useSelector } from 'react-redux';
 import commanServices from '../../redux/services/commanServices';
 import { useNavigation } from '@react-navigation/native';
@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
   },
 
   headerTitleAtten: {
-    fontSize: 18,
+    fontSize: FontSizes.medium,
     fontFamily: 'Quicksand-Bold',
     color: COLORS.textDark,
   },
@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
   counter: {
     position: 'absolute',
     bottom: 30,
-    fontSize: 16,
+    fontSize: FontSizes.normal,
     color: '#fff',
   },
 });

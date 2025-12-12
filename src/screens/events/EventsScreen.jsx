@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { COLORS } from "../../theme/theme";
+import { COLORS, FontSizes } from "../../theme/theme";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import commanServices from "../../redux/services/commanServices";
@@ -93,7 +93,7 @@ const EventsScreen = () => { // ✨ RENAMED COMPONENT
                             tagsStyles={{
                                 p: {
                                     fontFamily: "InterTight-Bold",
-                                    fontSize: 14,
+                                    fontSize: FontSizes.small,
                                     color: COLORS.gray,
                                     marginTop: 0,
                                     lineHeight: 20,
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
     },
 
     headerTitleAtten: {
-        fontSize: 18,
+        fontSize: FontSizes.medium,
         fontFamily: "Quicksand-Bold",
         color: COLORS.textDark,
     },
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
     },
 
     eventTitle: { // ✨ RENAMED STYLE
-        fontSize: 18, // Slightly reduced font size for better fit
+        fontSize: FontSizes.medium, // Slightly reduced font size for better fit
         fontFamily: "Quicksand-Bold",
         color: COLORS.textDark,
         width: '68%', // Adjusted width for title to make space for image
@@ -214,14 +214,14 @@ const styles = StyleSheet.create({
     },
 
     eventDesc: { // ✨ RENAMED STYLE
-        fontSize: 12,
+        fontSize: FontSizes.xsmall,
         color: COLORS.gray,
         marginVertical: 4,
         fontFamily: "Quicksand-Medium",
     },
 
     eventDate: { // ✨ RENAMED STYLE
-        fontSize: 12,
+        fontSize: FontSizes.xsmall,
         color: COLORS.gray,
         fontFamily: "Quicksand-Medium",
         marginTop: 5,

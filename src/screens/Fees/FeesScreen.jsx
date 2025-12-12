@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -8,27 +8,60 @@ import {
   Dimensions,
   Image,
   TouchableOpacity,
+  RefreshControl,
 } from 'react-native';
+
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { COLORS, Spacing } from '../../theme/theme';
+import { COLORS, FontSizes } from '../../theme/theme';
+
+import { useSelector } from "react-redux";
+import commanServices from "../../redux/services/commanServices";
 
 const { width, height } = Dimensions.get('window');
 
 export default function FeesScreen({ navigation }) {
-  const feeData = [
-    { id: 1, title: 'Tuition Fee', amount: '₹2,500', date: '01 Nov 2025' },
-    { id: 2, title: 'Library Fee', amount: '₹1,200', date: '20 Oct 2025' },
-    { id: 3, title: 'Transport Fee', amount: '₹1,000', date: '10 Oct 2025' },
-  ];
+
+  const { token } = useSelector((state) => state.auth);
+
+  const [outstanding, setOutstanding] = useState(null);
+  const [paidHistory, setPaidHistory] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+  // -------------------------------
+  // 🚀 Fetch Fee Summary API
+  // -------------------------------
+  const loadFeeSummary = async () => {
+    const res = await commanServices.getFeeSummary(token);
+
+    if (res.feeSummary) {
+      setOutstanding(res.feeSummary.outstanding);
+      setPaidHistory(res.feeSummary.paid_history);
+    }
+  };
+
+  // -------------------------------
+  // 🔥 Auto load data on page open
+  // -------------------------------
+  useEffect(() => {
+    loadFeeSummary();
+  }, []);
+
+  // -------------------------------
+  // 🔄 Pull-to-refresh
+  // -------------------------------
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await loadFeeSummary();
+    setRefreshing(false);
+  };
 
   return (
     <>
-      <StatusBar
-        backgroundColor={COLORS.whiteBackground}
-        barStyle="dark-content"
-      />
+      <StatusBar backgroundColor={COLORS.whiteBackground} barStyle="dark-content" />
+
       <SafeAreaView style={styles.safeArea}>
+
         {/* ---------- Header ---------- */}
         <View style={styles.header}>
           <TouchableOpacity
@@ -37,30 +70,61 @@ export default function FeesScreen({ navigation }) {
           >
             <Ionicons name="arrow-back" size={24} color={COLORS.textDark} />
           </TouchableOpacity>
+
           <Text style={styles.headerTitle}>Fees</Text>
+
           <View style={{ width: 24 }} />
         </View>
 
-        {/* ---------- Main Content ---------- */}
-        <ScrollView contentContainerStyle={styles.container}>
+        {/* ---------- Content with RefreshControl ---------- */}
+        <ScrollView
+          contentContainerStyle={styles.container}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={["#4287f5"]}
+            />
+          }
+        >
+
           {/* Outstanding Fees Box */}
           <View style={styles.feeBox}>
             <Text style={styles.feeBoxTitle}>Outstanding Fees</Text>
-            <Text style={styles.feePrice}>₹ 15,000</Text>
-            <Text style={styles.feeDueDate}>Dues - 20/December/2025</Text>
+
+            <Text style={styles.feePrice}>
+              ₹ {outstanding?.total_due ?? 0}
+            </Text>
+
+            <Text style={styles.feeDueDate}>
+              Total Fee: ₹ {outstanding?.total_fee ?? 0}
+            </Text>
+
+            <Text style={styles.feeDueDate}>
+              Total Paid: ₹ {outstanding?.total_paid ?? 0}
+            </Text>
+
+            {outstanding?.is_completed && (
+              <Text style={[styles.feeDueDate, { color: "#fff" }]}>
+                All Fees Cleared ✔
+              </Text>
+            )}
           </View>
 
-          <View></View>
-
-          {/* Fee History Section */}
-
+          {/* ---------- Paid History Section ---------- */}
           <View style={styles.feeHistoryBox}>
-            {feeData.map((item, index) => (
+            {paidHistory.length === 0 && (
+              <Text style={{ textAlign: "center", padding: 20, color: "#666" }}>
+                No payment history found.
+              </Text>
+            )}
+
+            {paidHistory.map((item, index) => (
               <View
-                key={item.id}
+                key={index}
                 style={[
                   styles.feeRow,
-                  index === feeData.length - 1 && { borderBottomWidth: 0 }, // hide border for last row
+                  index === paidHistory.length - 1 && { borderBottomWidth: 0 },
                 ]}
               >
                 <Image
@@ -69,42 +133,37 @@ export default function FeesScreen({ navigation }) {
                 />
 
                 <View style={styles.feeDetails}>
-                  <Text style={styles.feeRowTitle}>{item.title}</Text>
+                  <Text style={styles.feeRowTitle}>{item.fee_head}</Text>
+
                   <View style={styles.statusBadge}>
-                    <Text style={styles.statusText}>Paid</Text>
+                    <Text style={styles.statusText}>{item.status}</Text>
                   </View>
                 </View>
 
                 <View style={styles.amountBox}>
-                  <Text style={styles.amountText}>{item.amount}</Text>
-                  <Text style={styles.dateText}>{item.date}</Text>
+                  <Text style={styles.amountText}>₹ {item.amount}</Text>
+                  <Text style={styles.dateText}>{item.paid_date}</Text>
                 </View>
               </View>
             ))}
           </View>
-        </ScrollView>
-        {/* ---------- Bottom Pay Bar ---------- */}
-<View style={styles.payBar}>
-  <View>
-    <Text style={styles.totalDueText}>Total Due</Text>
-    <Text style={styles.totalDueAmount}>₹ 15,000</Text>
-  </View>
 
-  <TouchableOpacity style={styles.payButton}>
-    <Text style={styles.payButtonText}>Pay Now</Text>
-  </TouchableOpacity>
-</View>
+        </ScrollView>
 
       </SafeAreaView>
     </>
   );
 }
 
+// --------------------------
+// 🎨 Styles
+// --------------------------
 const styles = StyleSheet.create({
   safeArea: {
     backgroundColor: COLORS.whiteBackground,
     flex: 1,
   },
+
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -114,49 +173,55 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.whiteBackground,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
-    
   },
-  backButton: {
-    padding: 4,
-  },
+
+  backButton: { padding: 4 },
+
   headerTitle: {
-    fontSize: 18,
+    fontSize: FontSizes.medium,
     fontFamily: 'Quicksand-Bold',
     color: COLORS.textDark,
     textAlign: 'center',
   },
+
   container: {
     flexGrow: 1,
     padding: 20,
   },
+
   feeBox: {
     backgroundColor: COLORS.primary || '#3b82f6',
     padding: 20,
     borderRadius: 10,
   },
+
   feeBoxTitle: {
-    fontSize: Spacing.medium,
+    fontSize: FontSizes.small,
     fontFamily: 'Quicksand-Bold',
     color: '#fff',
     marginBottom: 8,
   },
+
   feePrice: {
-    fontSize: Spacing.xl,
+    fontSize: FontSizes.title,
     fontFamily: 'InterTight-Bold',
     color: '#fff',
   },
+
   feeDueDate: {
-    fontSize: Spacing.medium,
+    fontSize: FontSizes.small,
     fontFamily: 'Quicksand-Medium',
     color: '#fff',
     marginTop: 5,
   },
+
   feeHistoryBox: {
     backgroundColor: '#fff',
     borderRadius: 10,
     padding: 10,
     marginTop: 15,
   },
+
   feeRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -165,20 +230,22 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ccc',
     paddingVertical: 12,
   },
+
   icon: {
-    width: 30,
-    height: 30,
-    resizeMode: 'contain',
+    width: 28,
+    height: 28,
     marginRight: 10,
+    resizeMode: "contain",
   },
-  feeDetails: {
-    flex: 1,
-  },
+
+  feeDetails: { flex: 1 },
+
   feeRowTitle: {
-    fontSize: 16,
+    fontSize: FontSizes.normal,
     fontWeight: '600',
     color: '#333',
   },
+
   statusBadge: {
     backgroundColor: '#28a745',
     paddingVertical: 3,
@@ -187,62 +254,26 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginTop: 4,
   },
+
   statusText: {
     color: '#fff',
-    fontSize: 12,
+    fontSize: FontSizes.xsmall,
     fontWeight: '500',
   },
+
   amountBox: {
     alignItems: 'flex-end',
   },
+
   amountText: {
-    fontSize: 16,
+    fontSize: FontSizes.normal,
     fontWeight: '600',
     color: '#000',
   },
+
   dateText: {
-    fontSize: 12,
+    fontSize: FontSizes.xsmall,
     color: '#888',
     marginTop: 2,
   },
-  payBar: {
-  position: 'absolute',
-  bottom: 20,
-  left: 0,
-  right: 0,
-  backgroundColor: '#fff',
-  paddingVertical: 12,
-  paddingHorizontal: 20,
-  borderTopWidth: 1,
-  borderTopColor: '#e0e0e0',
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-},
-
-totalDueText: {
-  fontSize: 13,
-  color: '#555',
-  fontFamily: 'Quicksand-Medium',
-},
-
-totalDueAmount: {
-  fontSize: 20,
-  fontFamily: 'InterTight-Bold',
-  color: COLORS.primary || '#3b82f6',
-},
-
-payButton: {
-  backgroundColor: COLORS.primary || '#3b82f6',
-  paddingVertical: 10,
-  paddingHorizontal: 22,
-  borderRadius: 8,
-},
-
-payButtonText: {
-  color: '#fff',
-  fontSize: 16,
-  fontFamily: 'Quicksand-Bold',
-},
-
 });

@@ -14,7 +14,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import RenderHTML from "react-native-render-html";
-import { COLORS } from "../../theme/theme";
+import { COLORS, FontSizes } from "../../theme/theme";
 import { useSelector } from "react-redux";
 import commanServices from "../../redux/services/commanServices";
 
@@ -126,7 +126,7 @@ const EventsDetailScreen = ({ route, navigation }) => {
                         <RenderHTML
                             contentWidth={width}
                             source={{ html: event.full_description }}
-                            tagsStyles={{ p: { fontFamily: "InterTight-Bold", fontSize: 14, color: COLORS.gray, marginTop: 10, paddingHorizontal: 15, lineHeight: 20, }, b: { fontWeight: "800", fontSize: 14, color: COLORS.gray, }, strong: { fontWeight: "900", }, i: { fontFamily: "Quicksand-Medium", }, u: { textDecorationLine: "underline" }, }} enableExperimentalFeatures renderersProps={{ text: { allowFontScaling: false }, }}
+                            tagsStyles={{ p: { fontFamily: "InterTight-Bold", fontSize: FontSizes.small, color: COLORS.gray, marginTop: 10, paddingHorizontal: 15, lineHeight: 20, }, b: { fontWeight: "800", fontSize: FontSizes.small, color: COLORS.gray, }, strong: { fontWeight: "900", }, i: { fontFamily: "Quicksand-Medium", }, u: { textDecorationLine: "underline" }, }} enableExperimentalFeatures renderersProps={{ text: { allowFontScaling: false }, }}
                         />
                     )}
 
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
         backgroundColor: "rgba(0,0,0,0.4)",
     },
     eventsImageTitle: {
-        fontSize: 20,
+        fontSize: FontSizes.large,
         fontFamily: "Quicksand-Bold",
         color: "#fff",
         marginBottom: 6,
@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     eventsImageType: {
-        fontSize: 12,
+        fontSize: FontSizes.xsmall,
         fontFamily: "InterTight-Bold",
         color: "#fff",
         backgroundColor: "rgba(255,255,255,0.2)",
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
         borderRadius: 6,
     },
     eventsImageDate: {
-        fontSize: 12,
+        fontSize: FontSizes.xsmall,
         fontFamily: "InterTight-Medium",
         color: "#fff",
     },
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     eventsSubHeader: {
-        fontSize: 16,
+        fontSize: FontSizes.normal,
         fontFamily: "Quicksand-Bold",
         paddingHorizontal: 15,
         marginBottom: 10,

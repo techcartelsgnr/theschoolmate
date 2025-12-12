@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, TextInput } from 'react-native';
-import { COLORS } from '../theme/theme';
+import { COLORS, FontSizes } from '../theme/theme';
 
 const InputAuthField = ({
   label,
@@ -35,7 +35,7 @@ const InputAuthField = ({
         style={{
           color: COLORS.black,
           fontFamily: 'InterTight-Bold',
-          fontSize: 22,
+          fontSize: FontSizes.xlarge,
           marginRight: 5,
         }}
       >
@@ -57,7 +57,7 @@ const InputAuthField = ({
         flexBasis,
         width,
         color: COLORS.black,
-        fontSize: 22,
+        fontSize: FontSizes.xlarge,
         fontFamily: 'InterTight-Bold',
         paddingVertical: 0,
         opacity: 0.5,

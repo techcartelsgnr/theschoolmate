@@ -15,7 +15,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchSchoolInfo } from "../../redux/slices/commonSlice";
-import { COLORS } from "../../theme/theme";
+import { COLORS, FontSizes } from "../../theme/theme";
 
 const SchoolInfoScreen = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
     },
     headerTitle: {
-        fontSize: 18,
+        fontSize: FontSizes.medium,
         fontFamily: "Quicksand-Bold",
         color: COLORS.textDark,
     },
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
         height: 200,
     },
     schoolName: {
-        fontSize: 20,
+        fontSize: FontSizes.large,
         fontFamily: "Quicksand-Bold",
         color: COLORS.textDark,
         marginTop: 10,
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
     },
 
     infoLabel: {
-        fontSize: 12,
+        fontSize: FontSizes.xsmall,
         fontFamily: "InterTight-Medium",
         color: COLORS.textDark,
         opacity: 0.6,

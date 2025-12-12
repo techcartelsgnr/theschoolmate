@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { COLORS, Spacing } from '../../theme/theme';
+import { COLORS, FontSizes } from '../../theme/theme';
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from '../../redux/slices/authSlice';
 
@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
   },
   backButtonAtten: { padding: 4 },
   headerTitleAtten: {
-    fontSize: 18,
+    fontSize: FontSizes.normal,
     fontFamily: 'Quicksand-Bold',
     color: COLORS.textDark,
   },
@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   name: {
-    fontSize: 22,
+    fontSize: FontSizes.xlarge,
     fontFamily: 'Quicksand-Bold',
     color: COLORS.textDark,
     marginBottom: 2,
@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Quicksand-Bold',
     color: COLORS.textDark,
     marginBottom: 8,
-    fontSize: Spacing.medium,
+    fontSize: FontSizes.small,
   },
   infoBox: {
     width: '92%',
@@ -289,13 +289,13 @@ const styles = StyleSheet.create({
   rowLabel: {
     color: '#150000ff',
     fontFamily: 'Quicksand-Bold',
-    fontSize: Spacing.forteen,
+    fontSize: FontSizes.xsmall,
     width: '48%',
   },
   rowValue: {
     color: COLORS.secondaryGradientStart,
-    fontFamily: 'InterTight-Medium',
-    fontSize: Spacing.forteen,
+    fontFamily: 'Quicksand-Bold',
+    fontSize: FontSizes.xsmall,
     width: '48%',
     textAlign: 'right',
   },
@@ -314,7 +314,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
-    fontSize: 18,
+    fontSize: FontSizes.normal,
     textAlign: 'center',
     fontWeight: '600',
   },
@@ -332,13 +332,13 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   modalTitle: {
-    fontSize: 20,
+    fontSize: FontSizes.normal,
     fontFamily: 'Quicksand-Bold',
     color: COLORS.textDark,
     marginBottom: 10,
   },
   modalMessage: {
-    fontSize: 15,
+    fontSize: FontSizes.small,
     fontFamily: 'InterTight-Medium',
     color: COLORS.textDark,
     marginBottom: 20,
@@ -349,13 +349,13 @@ const styles = StyleSheet.create({
   },
   modalButton: {
     flex: 1,
-    paddingVertical: 12,
+    paddingVertical: 8,
     marginHorizontal: 5,
     borderRadius: 10,
     alignItems: 'center',
   },
   modalButtonText: {
-    fontSize: 16,
+    fontSize: FontSizes.small,
     fontFamily: 'Quicksand-Bold',
     color: COLORS.textDark,
   },

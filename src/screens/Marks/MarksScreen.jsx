@@ -12,7 +12,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { COLORS } from '../../theme/theme';
+import { COLORS, FontSizes } from '../../theme/theme';
 
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -92,25 +92,35 @@ export default function MarksScreen() {
         </View>
 
         {/* ⭐ EXAM TABS (NOW WORK PERFECTLY) */}
-        <View style={styles.tabs}>
-          {examsList.map((item, index) => (
-            <TouchableOpacity
-              key={index}
-              style={[
-                styles.tab,
-                activeExam === item.name && styles.tabActive,
-              ]}
-              onPress={() => handleExamChange(item)}
-            >
-              <Text
-                style={
-                  activeExam === item.name ? styles.tabActiveText : styles.tabText
-                }
+        <View style={styles.tabWrapper}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.tabs}
+          contentContainerStyle={styles.tabsContainer}
+        >
+          
+            {examsList.map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                style={[
+                  styles.tab,
+                  activeExam === item.name && styles.tabActive,
+                ]}
+                onPress={() => handleExamChange(item)}
               >
-                {item.name}
-              </Text>
-            </TouchableOpacity>
-          ))}
+                <Text
+                  style={
+                    activeExam === item.name ? styles.tabActiveText : styles.tabText
+                  }
+                >
+                  {item.name}
+                </Text>
+              </TouchableOpacity>
+            ))}
+         
+
+        </ScrollView>
         </View>
 
         {/* SUMMARY */}
@@ -158,8 +168,10 @@ export default function MarksScreen() {
    STYLES
 -------------------------------------------------- */
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#f5f6fa' },
-
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#f5f6fa'
+  },
   headerAtten: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -170,45 +182,55 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
   },
-
   backButtonAtten: { padding: 4 },
-
   headerTitleAtten: {
-    fontSize: 18,
+    fontSize: FontSizes.small,
     fontFamily: 'Quicksand-Bold',
     color: COLORS.textDark,
   },
-
+  tabWrapper: {              // 🔥 FIX EXTRA SPACE
+  backgroundColor: "#fff",
+  flexDirection: 'row',
+  justifyContent: "center",
+  borderBottomWidth: 1,
+  borderColor: "#E5E5E5",
+},
   tabs: {
-    flexDirection: 'row',
-    backgroundColor: '#fff',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-  },
+  backgroundColor: "#fff",
+  borderBottomWidth: 1,
+  borderColor: "#E5E5E5",             // 🔥 PERFECT FIX FOR EXTRA HEIGHT
+  paddingLeft: 10,
+},
+
+tabsContainer: {
+  alignItems: "center",
+  paddingRight: 20,
+  minWidth: "100%",       // allows smooth scrolling
+  flexDirection: 'row',
+  paddingVertical: 10,
+},
 
   tab: {
     paddingVertical: 6,
     paddingHorizontal: 16,
-    borderRadius: 10,
+    borderRadius: 5,
     marginRight: 10,
+    flexDirection: 'row',
+    
   },
-
   tabActive: {
     backgroundColor: '#182951',
   },
-
   tabText: {
     color: '#182951',
-    fontSize: 15,
+    fontSize: FontSizes.small,
     fontFamily: 'Quicksand-Bold',
   },
-
   tabActiveText: {
     color: '#fff',
-    fontSize: 15,
+    fontSize: FontSizes.small,
     fontFamily: 'Quicksand-Bold',
   },
-
   summaryCard: {
     backgroundColor: '#baf5d9',
     margin: 20,
@@ -216,30 +238,29 @@ const styles = StyleSheet.create({
     padding: 18,
     alignItems: 'flex-start',
   },
-
   summaryTitle: {
     color: '#2f4858',
-    fontSize: 17,
+    fontSize: FontSizes.normal,
     fontFamily: 'InterTight-Bold',
     marginBottom: 7,
   },
-
   summaryPercent: {
-    fontSize: 34,
+    fontSize: FontSizes.title,
     color: '#2f4858',
     fontFamily: 'InterTight-Bold',
   },
-
   summaryGrade: {
-    fontSize: 18,
+    fontSize: FontSizes.normal,
     color: '#388e3c',
     fontFamily: 'Quicksand-Bold',
   },
-
-  body: { flex: 1, paddingHorizontal: 20 },
+  body: {
+    flex: 1,
+    paddingHorizontal: 20
+  },
 
   sectionTitle: {
-    fontSize: 16,
+    fontSize: FontSizes.normal,
     fontFamily: 'Quicksand-Bold',
     color: '#2f4858',
     marginBottom: 10,
@@ -256,18 +277,24 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
 
-  subjectRow: { flexDirection: 'row', alignItems: 'center' },
+  subjectRow: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
 
   subjectText: {
-    fontSize: 12,
+    fontSize: FontSizes.xsmall,
     color: '#2f4858',
     fontFamily: 'Quicksand-Bold',
   },
 
-  gradeRow: { flexDirection: 'row', alignItems: 'center' },
+  gradeRow: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
 
   gradeLabel: {
-    fontSize: 11,
+    fontSize: FontSizes.xsmall,
     color: '#999',
     marginRight: 7,
     fontFamily: 'Quicksand-Bold',
@@ -283,6 +310,6 @@ const styles = StyleSheet.create({
   gradeText: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: 13,
+    fontSize: FontSizes.xsmall,
   },
 });

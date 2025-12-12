@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { COLORS } from "../../theme/theme";
+import { COLORS, FontSizes } from "../../theme/theme";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import commanServices from "../../redux/services/commanServices";
@@ -97,7 +97,7 @@ const ArticleScreen = () => {
                             tagsStyles={{
                                 p: {
                                     fontFamily: "InterTight-Bold",
-                                    fontSize: 14,
+                                    fontSize: FontSizes.small,
                                     color: COLORS.gray,
                                     marginTop: 10,
                                     lineHeight: 20,
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     },
 
     headerTitleAtten: {
-        fontSize: 18,
+        fontSize: FontSizes.medium,
         fontFamily: "Quicksand-Bold",
         color: COLORS.textDark,
     },
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
     },
 
     blogTitle: {
-        fontSize: 20,
+        fontSize: FontSizes.large,
         fontFamily: "Quicksand-Bold",
         color: COLORS.textDark,
         width: '70%',
@@ -213,14 +213,14 @@ const styles = StyleSheet.create({
     },
 
     blogDesc: {
-        fontSize: 12,
+        fontSize: FontSizes.xsmall,
         color: COLORS.gray,
         marginVertical: 4,
         fontFamily: "Quicksand-Medium",
     },
 
     blogDate: {
-        fontSize: 12,
+        fontSize: FontSizes.xsmall,
         color: COLORS.gray,
         fontFamily: "Quicksand-Medium",
     },

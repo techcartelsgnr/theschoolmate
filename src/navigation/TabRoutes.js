@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Image } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { COLORS, Spacing } from '../theme/theme';
+import { COLORS, FontSizes } from '../theme/theme';
 import {
   AttendanceScreen,
   HomeScreen,
@@ -33,7 +33,7 @@ export default function TabRoutes() {
         },
         tabBarLabelStyle: {
           fontFamily: 'Quicksand-Bold',
-          fontSize: Spacing.tabsize,
+          fontSize: FontSizes.tiny,
           letterSpacing: 0.2,
         },
       }}

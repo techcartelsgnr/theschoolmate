@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS } from "../../theme/theme";
+import { COLORS, FontSizes } from "../../theme/theme";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   headerTitle: {
-    fontSize: 18,
+    fontSize: FontSizes.medium,
     color: COLORS.textDark,
     fontFamily: "Quicksand-Bold",
   },
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     marginTop: 10,
-    fontSize: 14,
+    fontSize: FontSizes.small,
     color: "#999",
     fontFamily: "Quicksand-Bold",
   },

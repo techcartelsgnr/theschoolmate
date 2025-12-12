@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,147 +6,121 @@ import {
   FlatList,
   StatusBar,
   TouchableOpacity,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { COLORS, Spacing } from '../../theme/theme';
+  RefreshControl,
+} from "react-native";
 
-const daysInMonth = [
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-  1,
-  2,
-  3,
-  4,
-  5,
-  6,
-  7,
-  8,
-  9,
-  10,
-  11,
-  12,
-  13,
-  14,
-  15,
-  16,
-  17,
-  18,
-  19,
-  20,
-  21,
-  22,
-  23,
-  24,
-  25,
-  26,
-  27,
-  28,
-  29,
-  30,
-  '',
-  '',
-  '',
-];
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { COLORS, FontSizes } from "../../theme/theme";
+import { useSelector } from "react-redux";
+import commanServices from "../../redux/services/commanServices";
+import { useNavigation } from "@react-navigation/native";
 
-const attendanceStatus = {
-  present: [
-    1, 2, 3, 4, 5, 7, 8, 9, 11, 12, 14, 15, 16, 17, 18, 20, 21, 22, 23, 24, 30,
-  ],
-  absent: [6, 10, 13, 19, 25, 26],
-  late: [28],
-};
+export default function AttendanceScreen() {
+  const navigation = useNavigation();
+  const { token } = useSelector((state) => state.auth);
 
-const getDayStatus = day => {
-  if (attendanceStatus.present.includes(day)) return 'present';
-  if (attendanceStatus.absent.includes(day)) return 'absent';
-  if (attendanceStatus.late.includes(day)) return 'late';
-  return '';
-};
+  const [summary, setSummary] = useState(null);
+  const [groupedData, setGroupedData] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
-const weekDays = ['S0', 'M', 'T1', 'W', 'T2', 'F', 'S3'];
-const weekLabels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+  const formatDate = (dateStr) => {
+    const d = new Date(dateStr);
+    return d.toLocaleDateString("en-US", {
+      month: "short",
+      day: "2-digit",
+      year: "numeric",
+    });
+  };
 
-const AttendanceCalendar = () => (
-  <View style={styles.calendarContainer}>
-    <View style={styles.calendarHeader}>
-      <Text style={styles.calendarHeaderText}>December 2024</Text>
-      <View style={styles.calendarTodayCircle}>
-        <Text style={styles.calendarTodayText}>20</Text>
+  // --------------------------------
+  // 📌 Load Attendance Data
+  // --------------------------------
+  const loadAttendance = async () => {
+    const res = await commanServices.getAttendanceSummary(token);
+
+    if (res.attendanceSummary) {
+      const s = res.attendanceSummary;
+      setSummary(s);
+
+      // 🔥 Group data month-wise
+      let monthArray = s.calendar.map((monthObj) => {
+        return {
+          month: monthObj.month, // "December 2025"
+          items: monthObj.days.map((d) => ({
+            date: formatDate(d.date),
+            present: d.status === "Present",
+          })),
+        };
+      });
+
+      // 🔥 Sort months newest → oldest by year_month
+      monthArray.sort((a, b) => {
+        const aDate = new Date(a.month);
+        const bDate = new Date(b.month);
+        return bDate - aDate; // latest first
+      });
+
+      setGroupedData(monthArray);
+    }
+  };
+
+  useEffect(() => {
+    loadAttendance();
+  }, []);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await loadAttendance();
+    setRefreshing(false);
+  };
+
+  // --------------------------------
+  // 📌 Detailed Row UI
+  // --------------------------------
+  const DetailedRow = ({ item }) => (
+    <View style={styles.detailRow}>
+      <View style={{ width: 18, marginRight: 5 }}>
+        {/* <Icon
+          name={item.present ? "check-circle" : "cancel"}
+          color={item.present ? "#48c775" : "#ff7272"}
+          size={24}
+        /> */}
+        <Ionicons name="calendar" size={14} color={COLORS.textDark} />
+      </View>
+
+      <View style={{ flex: 1 }}>
+        <Text style={styles.detailDate}>{item.date}</Text>
+      </View>
+
+      <View style={{ alignItems: "flex-end" }}>
+        <Text
+          style={[
+            styles.detailStatus,
+            { color: item.present ? "#48c775" : "#ff7272" },
+          ]}
+        >
+          {item.present ? "Present" : "Absent"}
+        </Text>
       </View>
     </View>
+  );
 
-    <View style={styles.calendarDaysRow}>
-      {weekLabels.map((d, idx) => (
-        <Text style={styles.calendarDayName} key={idx}>
-          {d}
-        </Text>
+  // --------------------------------
+  // 📌 Month Block Renderer
+  // --------------------------------
+  const renderMonthBlock = ({ item }) => (
+    <View style={{ marginBottom: 0 }}>
+      {/* Month Name Title */}
+      <Text style={styles.sectionTitle}>{item.month}</Text>
+
+      {/* Rows */}
+      {item.items.map((row, index) => (
+        <DetailedRow key={index} item={row} />
       ))}
     </View>
+  );
 
-    <View style={styles.calendarGrid}>
-      {daysInMonth.map((date, idx) => {
-        let status = getDayStatus(date);
-        let bgColor = '#fff';
-        if (status === 'present') bgColor = '#6fd780';
-        if (status === 'absent') bgColor = '#ff7272';
-        if (status === 'late') bgColor = '#ffd950';
-
-        return (
-          <View
-            key={idx}
-            style={[styles.calendarCell, { backgroundColor: bgColor }]}
-          >
-            <Text style={styles.calendarCellText}>{date || ''}</Text>
-          </View>
-        );
-      })}
-    </View>
-  </View>
-);
-
-const details = [
-  {
-    date: 'Dec 19, 2024',
-    in: '8:00 AM',
-    out: '2:30 PM',
-    present: true,
-    sub: 'Thuesday',
-  },
-];
-
-const DetailedRow = ({ item }) => (
-  <View style={styles.detailRow}>
-    <View style={{ width: 24, marginRight: 5 }}>
-      <Icon
-        name={item.present ? 'check-circle' : 'cancel'}
-        color={item.present ? '#48c775' : '#ff7272'}
-        size={24}
-      />
-    </View>
-
-    <View style={{ flex: 1 }}>
-      <Text style={styles.detailDate}>{item.date}</Text>
-      <Text style={styles.detailSub}>{item.sub}</Text>
-    </View>
-
-    <View style={{ alignItems: 'flex-end' }}>
-      <Text style={styles.detailInOut}>
-        In: <Text style={{ color: '#182951' }}>{item.in}</Text>
-      </Text>
-      <Text style={styles.detailInOut}>
-        Out: <Text style={{ color: '#182951' }}>{item.out}</Text>
-      </Text>
-    </View>
-  </View>
-);
-
-export default function AttendanceScreen({ navigation }) {
   return (
     <>
       <StatusBar
@@ -155,7 +129,7 @@ export default function AttendanceScreen({ navigation }) {
       />
 
       <SafeAreaView style={styles.safeArea}>
-        {/* Header */}
+        {/* HEADER */}
         <View style={styles.headerAtten}>
           <TouchableOpacity
             style={styles.backButtonAtten}
@@ -166,32 +140,57 @@ export default function AttendanceScreen({ navigation }) {
 
           <Text style={styles.headerTitleAtten}>Attendance</Text>
 
-          <View style={{ width: '15%' }} />
+          <View style={{ width: "15%" }} />
         </View>
 
-        {/* MAIN LIST */}
+        {/* LIST */}
         <FlatList
-          data={details}
-          keyExtractor={(_, idx) => idx.toString()}
-          renderItem={DetailedRow}
+          data={groupedData}
+          keyExtractor={(item, idx) => idx.toString()}
+          renderItem={renderMonthBlock}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={["#4287f5"]}
+            />
+          }
           contentContainerStyle={{ padding: 20, paddingBottom: 80 }}
           ListHeaderComponent={
-            <>
-              <View style={styles.summaryCard}>
-                <Text style={styles.summaryLabel}>Monthly Summary</Text>
-                <Text style={styles.summaryValue}>92%</Text>
+            summary && (
+              <>
+                {/* SUMMARY CARD */}
+                <View style={styles.summaryCard}>
+                  <Text style={styles.summaryLabel}>Monthly Summary</Text>
 
-                <Text style={[styles.summaryStatus, { color: '#48c775' }]}>
-                  Present
-                </Text>
+                  <Text style={styles.summaryValue}>
+                    {summary.attendance_percentage}%
+                  </Text>
 
-                <Text style={styles.summaryFootnote}>Total: 18/20 days</Text>
-              </View>
+                  <Text
+                    style={[
+                      styles.summaryStatus,
+                      {
+                        color:
+                          summary.attendance_percentage >= 75
+                            ? "#48c775"
+                            : "#ff7272",
+                      },
+                    ]}
+                  >
+                    {summary.attendance_percentage >= 75
+                      ? "Good Attendance"
+                      : "Low Attendance"}
+                  </Text>
 
-              <AttendanceCalendar />
+                  <Text style={styles.summaryFootnote}>
+                    Total: {summary.total_present}/{summary.total_days} days
+                  </Text>
+                </View>
 
-              <Text style={styles.sectionTitle}>Detailed List</Text>
-            </>
+                {/* Remove old "Detailed List" title */}
+              </>
+            )
           }
         />
       </SafeAreaView>
@@ -199,138 +198,86 @@ export default function AttendanceScreen({ navigation }) {
   );
 }
 
+// ------------------------------------------------------
+// 🎨 Existing Styles (only added sectionTitle for month)
+// ------------------------------------------------------
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#f5f6fa',
-  },
+  safeArea: { flex: 1, backgroundColor: "#f5f6fa" },
 
   headerAtten: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingHorizontal: 20,
     paddingVertical: 12,
     backgroundColor: COLORS.whiteBackground,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: "#e0e0e0",
     elevation: 1,
   },
 
   backButtonAtten: { padding: 4 },
 
   headerTitleAtten: {
-    fontSize: 18,
-    fontFamily: 'Quicksand-Bold',
+    fontSize: FontSizes.small,
+    fontFamily: "Quicksand-Bold",
     color: COLORS.textDark,
   },
 
   summaryCard: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
+    backgroundColor: "#fff",
+    borderRadius: 5,
     padding: 18,
-    marginBottom: 16,
-    elevation: 2,
+    marginBottom: 5,
+    elevation: 1,
   },
 
-  summaryLabel: { fontWeight: 'bold', fontSize: 15, color: '#182951' },
+  summaryLabel: {
+    fontWeight: "bold",
+    fontSize: FontSizes.small,
+    color: "#182951"
+  },
   summaryValue: {
-    fontSize: 34,
-    fontWeight: 'bold',
-    color: '#48c775',
+    fontSize: FontSizes.title,
+    fontWeight: "bold",
+    color: "#48c775",
     marginTop: 6,
   },
-  summaryStatus: { fontWeight: 'bold', fontSize: 17 },
-  summaryFootnote: { color: '#888', marginTop: 2, fontSize: 13 },
-
-  calendarContainer: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 10,
-    marginBottom: 10,
+  summaryStatus: {
+    fontWeight: "bold",
+    fontSize: 17
   },
-
-  calendarHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 7,
-  },
-
-  calendarHeaderText: {
-    fontFamily: 'Quicksand-Bold',
-    fontSize: 16,
-    color: '#182951',
-  },
-
-  calendarTodayCircle: {
-    backgroundColor: '#4287f5',
-    borderRadius: 12,
-    padding: 7,
-  },
-
-  calendarTodayText: {
-    color: '#fff',
-    fontFamily: 'Quicksand-Bold',
-    fontSize: Spacing.medium,
-  },
-
-  calendarDaysRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 4,
-  },
-
-  calendarDayName: {
-    width: 27,
-    textAlign: 'center',
-    color: '#888',
-    fontFamily: 'Quicksand-Bold',
-    fontSize: 14,
-  },
-
-  calendarGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-
-  calendarCell: {
-    width: 27,
-    height: 27,
-    alignItems: 'center',
-    justifyContent: 'center',
-    margin: 3,
-    borderRadius: 14,
-  },
-
-  calendarCellText: {
-    fontSize: 14,
-    fontFamily: 'Quicksand-Bold',
-    color: '#182951',
+  summaryFootnote: {
+    color: "#888",
+    marginTop: 2,
+    fontSize: FontSizes.xsmall,
   },
 
   sectionTitle: {
-    fontFamily: 'Quicksand-Bold',
-    fontSize: 16,
-    color: '#182951',
+    fontFamily: "Quicksand-Bold",
+    fontSize: FontSizes.normal,
+    color: "#182951",
     marginVertical: 10,
   },
 
   detailRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
     marginBottom: 8,
-    borderRadius: 10,
+    borderRadius: 5,
     padding: 12,
-    elevation: 2,
+    elevation: 1,
   },
 
-  detailDate: { fontSize: 16, color: '#182951', fontFamily: 'Quicksand-Bold' },
-  detailSub: {
-    color: '#888',
-    fontSize: 13,
-    marginTop: 2,
-    fontFamily: 'Quicksand-Bold',
+  detailDate: {
+    fontSize: FontSizes.xsmall,
+    color: "#182951",
+    fontFamily: "Quicksand-Bold",
   },
-  detailInOut: { fontSize: 13, color: '#888', fontFamily: 'Quicksand-Bold' },
+
+  detailStatus: {
+    fontSize: FontSizes.xsmall,
+    fontFamily: "Quicksand-Bold",
+  },
 });

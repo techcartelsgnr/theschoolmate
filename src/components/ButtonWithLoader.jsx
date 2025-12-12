@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   StyleSheet,
 } from 'react-native';
+import { FontSizes } from '../theme/theme';
 
 const ButtonWithLoader = ({
   isLoading,
@@ -38,7 +39,7 @@ const styles = StyleSheet.create({
   text: {
     color: '#fff',
     fontFamily: 'Quicksand-Bold',
-    fontSize: 16,
+    fontSize: FontSizes.normal,
     textTransform: 'uppercase',
     textAlign: 'center',
   },

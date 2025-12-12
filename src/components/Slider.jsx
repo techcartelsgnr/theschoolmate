@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import commanServices from '../redux/services/commanServices';
-import { COLORS } from '../theme/theme';
 
 export default function BasicSlider() {
   const scrollX = useRef(new Animated.Value(0)).current;

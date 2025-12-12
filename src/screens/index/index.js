@@ -1,7 +1,5 @@
 export { default as HomeScreen } from '../home/HomeScreen';
 export { default as LoginScreen } from '../auth/LoginScreen';
-export { default as ForgotPinScreen } from '../auth/ForgotPinScreen';
-export { default as OtpScreen } from '../auth/OtpScreen';
 export { default as FeesScreen } from '../Fees/FeesScreen';
 export { default as MarksScreen } from '../Marks/MarksScreen';
 export { default as ProfileScreen } from '../Profile/ProfileScreen';
@@ -17,3 +15,7 @@ export { default as EventsScreen } from '../events/EventsScreen';
 export { default as EventsDetailScreen } from '../events/EventsDetailScreen';
 export { default as SchoolInfoScreen } from '../schoolinfo/SchoolInfoScreen';
 export { default as NotificationScreen } from '../notification/NotificationScreen';
+export { default as FeedbackScreen } from '../feedback/FeedbackScreen';
+export { default as FeedbackHistoryScreen } from '../feedback/FeedbackHistoryScreen';
+export { default as ActivitiesScreen } from '../activities/ActivitiesScreen';
+export { default as ActivitiesDetailScreen } from '../activities/ActivitiesDetailScreen';

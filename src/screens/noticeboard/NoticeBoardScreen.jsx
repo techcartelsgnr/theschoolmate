@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { COLORS, Spacing } from '../../theme/theme';
+import { COLORS, FontSizes } from '../../theme/theme';
 import { useNavigation } from '@react-navigation/native';
 
 export default function NoticeBoard() {
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     },
     backButtonAtten: { padding: 4 },
     headerTitleAtten: {
-        fontSize: 18,
+        fontSize: FontSizes.medium,
         fontFamily: 'Quicksand-Bold',
         color: COLORS.textDark,
     },
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
         marginBottom: 8,
     },
     noticeMessage: {
-        fontSize: 14,
+        fontSize: FontSizes.small,
         color: '#444',
         fontFamily: 'Quicksand-Medium',
         lineHeight: 20,
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
         marginTop: 8,
         color: COLORS.primary || '#1e40af',
         fontFamily: 'Quicksand-Bold',
-        fontSize: 14,
+        fontSize: FontSizes.small,
     },
 });
 

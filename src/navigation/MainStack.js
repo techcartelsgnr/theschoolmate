@@ -2,6 +2,8 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TabRoutes from '../navigation/TabRoutes';
 import {
+  ActivitiesDetailScreen,
+  ActivitiesScreen,
   ArticleDetailScreen,
   ArticleScreen,
   BlogDetailScreen,
@@ -36,6 +38,10 @@ const MainStack = () => {
       <Stack.Screen name="EventsDetailScreen" component={EventsDetailScreen} />
       <Stack.Screen name="SchoolInfoScreen" component={SchoolInfoScreen} />
       <Stack.Screen name="NotificationScreen" component={NotificationScreen} />
+      
+      <Stack.Screen name="ActivitiesScreen" component={ActivitiesScreen} />
+      <Stack.Screen name="ActivitiesDetailScreen" component={ActivitiesDetailScreen} />
+      
     </Stack.Navigator>
   );
 };

@@ -14,7 +14,7 @@ import { fetchLogin } from "../../redux/slices/authSlice";
 
 import InputAuthField from '../../components/InputAuthField';
 import ButtonWithLoader from '../../components/ButtonWithLoader';
-import { COLORS } from '../../theme/theme';
+import { COLORS, FontSizes } from '../../theme/theme';
 
 
 
@@ -162,14 +162,14 @@ const styles = StyleSheet.create({
   },
 
   appTitle: {
-    fontSize: 24,
+    fontSize: FontSizes.xlarge,
     color: '#fff',
     fontFamily: 'Quicksand-Bold',
     marginTop: 0,
   },
 
   appSubtitle: {
-    fontSize: 14,
+    fontSize: FontSizes.small,
     color: '#cbd5e1',
     fontFamily: 'Quicksand-Medium',
     marginTop: 0,
