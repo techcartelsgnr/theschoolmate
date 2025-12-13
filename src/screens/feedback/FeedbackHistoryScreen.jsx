@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   backButton: { padding: 4 },
 
   headerTitle: {
-    fontSize: FontSizes.medium,
+    fontSize: FontSizes.normal,
     fontFamily: "Quicksand-Bold",
     color: COLORS.textDark,
   },

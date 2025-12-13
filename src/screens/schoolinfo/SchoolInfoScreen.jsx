@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
     },
     headerTitle: {
-        fontSize: FontSizes.medium,
+        fontSize: FontSizes.normal,
         fontFamily: "Quicksand-Bold",
         color: COLORS.textDark,
     },

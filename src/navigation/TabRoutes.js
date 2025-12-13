@@ -33,7 +33,7 @@ export default function TabRoutes() {
         },
         tabBarLabelStyle: {
           fontFamily: 'Quicksand-Bold',
-          fontSize: FontSizes.tiny,
+          fontSize: FontSizes.nine,
           letterSpacing: 0.2,
         },
       }}

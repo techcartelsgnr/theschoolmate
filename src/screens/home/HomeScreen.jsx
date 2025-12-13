@@ -20,14 +20,12 @@ import Slider from '../../components/Slider';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { fetchSchoolInfo } from "../../redux/slices/commonSlice";
 
-
 const { width, height } = Dimensions.get('window');
 
 // Home categories
 const categories = [
   { title: 'Activities', image: require('../../../assets/homeicon/attendancescreen.png'), screen: 'ActivitiesScreen' },
   { title: 'Fee Details', image: require('../../../assets/homeicon/feescreen.png'), screen: 'FeesScreen' },
-
   // { title: 'Report Cards', image: require('../../../assets/homeicon/report.png'), screen: 'ReportCardScreen' },
   // { title: 'Profile', image: require('../../../assets/homeicon/profilescreen.png'), screen: 'ProfileScreen' },
   { title: 'Notice Board', image: require('../../../assets/homeicon/notice.png'), screen: 'NoticeBoardScreen' },
@@ -296,7 +294,7 @@ const styles = StyleSheet.create({
     height: 42
   },
   catTitle: {
-    fontSize: FontSizes.xsmall,
+    fontSize: FontSizes.small,
     color: COLORS.whiteBackground,
     fontFamily: 'Quicksand-Bold',
     marginTop: 8,

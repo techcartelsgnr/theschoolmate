@@ -24,7 +24,8 @@ export const COLORS = {
 
 
 export const FontSizes = {
-  tiny: RFValue(8),      // very small
+  tiny: RFValue(8),
+  nine: RFValue(9),     // very small
   xsmall: RFValue(10),
   small: RFValue(12),
   normal: RFValue(14),

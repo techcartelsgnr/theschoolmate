@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     },
 
     headerTitle: {
-        fontSize: FontSizes.medium,
+        fontSize: FontSizes.normal,
         fontFamily: "Quicksand-Bold",
         color: COLORS.textDark,
     },

@@ -289,13 +289,13 @@ const styles = StyleSheet.create({
   rowLabel: {
     color: '#150000ff',
     fontFamily: 'Quicksand-Bold',
-    fontSize: FontSizes.xsmall,
+    fontSize: FontSizes.small,
     width: '48%',
   },
   rowValue: {
     color: COLORS.secondaryGradientStart,
     fontFamily: 'Quicksand-Bold',
-    fontSize: FontSizes.xsmall,
+    fontSize: FontSizes.small,
     width: '48%',
     textAlign: 'right',
   },

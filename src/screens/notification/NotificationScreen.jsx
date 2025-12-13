@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   headerTitle: {
-    fontSize: FontSizes.medium,
+    fontSize: FontSizes.normal,
     color: COLORS.textDark,
     fontFamily: "Quicksand-Bold",
   },

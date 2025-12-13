@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     },
     backButtonAtten: { padding: 4 },
     headerTitleAtten: {
-        fontSize: FontSizes.medium,
+        fontSize: FontSizes.normal,
         fontFamily: 'Quicksand-Bold',
         color: COLORS.textDark,
     },
